@@ -29,10 +29,10 @@
     }
     .strip {
       margin: 20px auto;
-      width: max-content; /* Ширина по содержимому, но центрируется */
+      width: max-content;
       display: flex;
       flex-direction: column;
-      align-items: flex-start; /* Строки начинаются слева */
+      align-items: flex-start;
       justify-content: center;
       padding: 10px;
       background: #1a1a1a;
@@ -43,7 +43,7 @@
       display: flex;
       gap: 4px;
       margin-bottom: 8px;
-      /* Каждая строка начинается с левого края */
+      
     }
     .led {
       width: 16px;
@@ -84,11 +84,9 @@
   </div>
 
   <script>
-    // Константы
     const NUM_LEDS = 180;
     const TOTAL_LEVELS = 3;
 
-    // Структура строк: 4×38 и 1×28
     const rows = [
       { start: 0,   count: 38 },
       { start: 38,  count: 38 },
@@ -97,19 +95,16 @@
       { start: 152, count: 28 }
     ];
 
-    // DOM
     const stripEl = document.getElementById('strip');
     const levelEl = document.getElementById('level');
     const statusEl = document.getElementById('status');
 
-    // Игровые переменные
     let networks = new Array(NUM_LEDS).fill(180);
     let currPos = 0;
     let gameWon = false;
     let currentLevel = 1;
     let L_FINISH = 0;
 
-    // Создание ленты: строки начинаются слева, весь блок — по центру
     function createStrip() {
       stripEl.innerHTML = '';
       rows.forEach(row => {
@@ -125,7 +120,6 @@
       });
     }
 
-    // Заполнение уровня
     function fillList(level) {
       networks.fill(180);
       if (level === 1) {
@@ -193,7 +187,6 @@
       }
     }
 
-    // Отрисовка
     function draw() {
       for (let i = 0; i < NUM_LEDS; i++) {
         const led = document.getElementById(`led-${i}`);
@@ -213,7 +206,6 @@
       document.getElementById(`led-${currPos}`).style.backgroundColor = 'white';
     }
 
-    // Анимация старта
     function startAnimation() {
       statusEl.textContent = "Поле загружено.";
       setTimeout(() => {
@@ -221,7 +213,6 @@
       }, 600);
     }
 
-    // Движение
     function moveLeft() {
       const rowLen = (currPos < 152) ? 38 : 28;
       const start = currPos - (currPos % rowLen);
@@ -261,7 +252,6 @@
       }
     }
 
-    // Сброс
     function resetGame() {
       currentLevel = (currentLevel % TOTAL_LEVELS) + 1;
       levelEl.textContent = currentLevel;
@@ -291,11 +281,11 @@
 
     document.getElementById('btn-reset').addEventListener('click', resetGame);
 
-    // Инициализация
     createStrip();
     fillList(1);
     startAnimation();
     draw();
   </script>
 </body>
+
 </html>
