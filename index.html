@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MouseGame: Web-версия</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #0f0;
+      margin-bottom: 10px;
+    }
+    .level-info {
+      font-size: 18px;
+      margin: 10px;
+      color: #0f8;
+    }
+    .status {
+      color: #ff0;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .strip {
+      margin: 20px auto;
+      width: max-content; /* Ширина по содержимому, но центрируется */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Строки начинаются слева */
+      justify-content: center;
+      padding: 10px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+    }
+    .row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+      /* Каждая строка начинается с левого края */
+    }
+    .led {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      background: #222;
+    }
+    .btn-group {
+      margin: 20px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>MouseGame: Web-версия</h1>
+  <div class="level-info">Уровень: <span id="level">1</span></div>
+  <div class="status" id="status"></div>
+
+  <div class="strip" id="strip"></div>
+
+  <div class="btn-group">
+    <button id="btn-left">← Влево</button>
+    <button id="btn-center">🕳️ Занырнуть</button>
+    <button id="btn-right">Вправо →</button>
+    <button id="btn-reset">↻ Сброс</button>
+  </div>
+
+  <script>
+    // Константы
+    const NUM_LEDS = 180;
+    const TOTAL_LEVELS = 3;
+
+    // Структура строк: 4×38 и 1×28
+    const rows = [
+      { start: 0,   count: 38 },
+      { start: 38,  count: 38 },
+      { start: 76,  count: 38 },
+      { start: 114, count: 38 },
+      { start: 152, count: 28 }
+    ];
+
+    // DOM
+    const stripEl = document.getElementById('strip');
+    const levelEl = document.getElementById('level');
+    const statusEl = document.getElementById('status');
+
+    // Игровые переменные
+    let networks = new Array(NUM_LEDS).fill(180);
+    let currPos = 0;
+    let gameWon = false;
+    let currentLevel = 1;
+    let L_FINISH = 0;
+
+    // Создание ленты: строки начинаются слева, весь блок — по центру
+    function createStrip() {
+      stripEl.innerHTML = '';
+      rows.forEach(row => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'row';
+        for (let i = row.start; i < row.start + row.count; i++) {
+          const led = document.createElement('div');
+          led.className = 'led';
+          led.id = `led-${i}`;
+          rowEl.appendChild(led);
+        }
+        stripEl.appendChild(rowEl);
+      });
+    }
+
+    // Заполнение уровня
+    function fillList(level) {
+      networks.fill(180);
+      if (level === 1) {
+        L_FINISH = 36;
+        networks[0] = 181;
+        networks[35] = 182;
+        currPos = 0;
+
+        networks[1] = 12; networks[12] = 23; networks[23] = 1;
+        networks[2] = 17; networks[17] = 29; networks[29] = 7; networks[7] = 2;
+        networks[6] = 19; networks[19] = 32; networks[32] = 33; networks[33] = 6;
+        networks[5] = 15; networks[15] = 5;
+        networks[14] = 35; networks[35] = 14;
+        networks[36] = 182;
+      } else if (level === 2) {
+        L_FINISH = 179;
+        networks[0] = 181;
+        networks[179] = 182;
+        currPos = 0;
+
+        networks[1] = 46; networks[46] = 175; networks[175] = 100; networks[100] = 137; networks[137] = 1;
+        networks[11] = 88; networks[88] = 148; networks[148] = 54; networks[54] = 169; networks[169] = 11;
+        networks[21] = 43; networks[43] = 170; networks[170] = 95; networks[95] = 130; networks[130] = 21;
+        networks[23] = 157; networks[157] = 144; networks[144] = 113; networks[113] = 75; networks[75] = 23;
+        networks[35] = 80; networks[80] = 62; networks[62] = 122; networks[122] = 178; networks[178] = 35;
+        networks[179] = 182;
+
+        const bags = [176,163,116,134,141,107,84,39,50,58,71,6,22,29];
+        bags.forEach(i => networks[i] = 183);
+
+        for (let i = 12; i <= 20; i++) networks[i] = 185;
+        networks[44] = 185; networks[45] = 185;
+        for (let i = 89; i <= 94; i++) networks[i] = 185;
+        for (let i = 96; i <= 99; i++) networks[i] = 185;
+        for (let i = 145; i <= 147; i++) networks[i] = 185;
+        for (let i = 123; i <= 129; i++) networks[i] = 185;
+        for (let i = 171; i <= 174; i++) networks[i] = 185;
+      } else if (level === 3) {
+        L_FINISH = 179;
+        networks[0] = 181;
+        networks[179] = 182;
+        currPos = 0;
+
+        networks[1] = 53; networks[53] = 169; networks[169] = 40; networks[40] = 69; networks[69] = 100; networks[100] = 102; networks[102] = 1;
+        networks[8] = 9; networks[9] = 174; networks[174] = 131; networks[131] = 68; networks[68] = 70; networks[70] = 8;
+        networks[10] = 131; networks[131] = 88; networks[88] = 60; networks[60] = 2; networks[2] = 80; networks[80] = 94; networks[94] = 10;
+        networks[18] = 87; networks[87] = 62; networks[62] = 47; networks[47] = 78; networks[78] = 110; networks[110] = 132; networks[132] = 18;
+        networks[37] = 155; networks[155] = 101; networks[101] = 118; networks[118] = 124; networks[124] = 147; networks[147] = 143; networks[143] = 37;
+        networks[33] = 41; networks[41] = 136; networks[136] = 23; networks[23] = 160; networks[160] = 74; networks[74] = 79; networks[79] = 33;
+        networks[144] = 178; networks[179] = 182;
+
+        const bags = [5,14,27,44,55,65,72,84,97,106,115,128,141,149,164,176];
+        bags.forEach(i => networks[i] = 183);
+
+        for (let i = 19; i <= 22; i++) networks[i] = 185;
+        for (let i = 34; i <= 36; i++) networks[i] = 185;
+        for (let i = 48; i <= 52; i++) networks[i] = 185;
+        networks[61] = 185;
+        for (let i = 89; i <= 93; i++) networks[i] = 185;
+        for (let i = 119; i <= 123; i++) networks[i] = 185;
+        for (let i = 133; i <= 135; i++) networks[i] = 185;
+        for (let i = 145; i <= 146; i++) networks[i] = 185;
+        for (let i = 156; i <= 159; i++) networks[i] = 185;
+        for (let i = 170; i <= 173; i++) networks[i] = 185;
+      }
+    }
+
+    // Отрисовка
+    function draw() {
+      for (let i = 0; i < NUM_LEDS; i++) {
+        const led = document.getElementById(`led-${i}`);
+        if (!led) continue;
+
+        let color = '#222';
+        if (networks[i] === 180) color = '#222';
+        else if (networks[i] === 181) color = 'blue';
+        else if (networks[i] === 182) color = 'red';
+        else if (networks[i] === 183) color = 'orange';
+        else if (networks[i] === 185) color = 'yellow';
+        else if (networks[i] < 180) color = 'green';
+
+        led.style.backgroundColor = color;
+      }
+
+      document.getElementById(`led-${currPos}`).style.backgroundColor = 'white';
+    }
+
+    // Анимация старта
+    function startAnimation() {
+      statusEl.textContent = "Поле загружено.";
+      setTimeout(() => {
+        draw();
+      }, 600);
+    }
+
+    // Движение
+    function moveLeft() {
+      const rowLen = (currPos < 152) ? 38 : 28;
+      const start = currPos - (currPos % rowLen);
+      const nextPos = currPos - 1;
+      if (nextPos < start) return;
+      if (networks[nextPos] === 183) return;
+      if ([...Array(180).keys(), 181, 182, 185].includes(networks[nextPos])) {
+        currPos = nextPos;
+      }
+    }
+
+    function moveRight() {
+      const rowLen = (currPos < 152) ? 38 : 28;
+      const start = currPos - (currPos % rowLen);
+      const end = start + rowLen;
+      const nextPos = currPos + 1;
+      if (nextPos >= end) return;
+      if (networks[nextPos] === 183) return;
+      if ([...Array(180).keys(), 181, 182, 185].includes(networks[nextPos])) {
+        currPos = nextPos;
+      }
+      if (currPos === L_FINISH) {
+        gameWon = true;
+        statusEl.textContent = "🎉 ПОБЕДА! Переход на следующий уровень...";
+        setTimeout(resetGame, 1500);
+      }
+    }
+
+    function moveToNextHoleInNetwork() {
+      if (networks[currPos] >= 0 && networks[currPos] < 180) {
+        currPos = networks[currPos];
+        if (currPos === L_FINISH) {
+          gameWon = true;
+          statusEl.textContent = "🎉 ПОБЕДА! Переход на следующий уровень...";
+          setTimeout(resetGame, 1500);
+        }
+      }
+    }
+
+    // Сброс
+    function resetGame() {
+      currentLevel = (currentLevel % TOTAL_LEVELS) + 1;
+      levelEl.textContent = currentLevel;
+      gameWon = false;
+      fillList(currentLevel);
+      startAnimation();
+    }
+
+    // Кнопки
+    document.getElementById('btn-left').addEventListener('click', () => {
+      if (gameWon) return;
+      moveLeft();
+      draw();
+    });
+
+    document.getElementById('btn-right').addEventListener('click', () => {
+      if (gameWon) return;
+      moveRight();
+      draw();
+    });
+
+    document.getElementById('btn-center').addEventListener('click', () => {
+      if (gameWon) return;
+      moveToNextHoleInNetwork();
+      draw();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', resetGame);
+
+    // Инициализация
+    createStrip();
+    fillList(1);
+    startAnimation();
+    draw();
+  </script>
+</body>
+</html>
