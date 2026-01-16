@@ -9,6 +9,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --accent-color: #0f8;
+      --accent-shadow: rgba(0, 255, 136, 0.3);
+      --bg-color: #111;
+      --section-bg: #1a1a1a;
+      --text-color: #eee;
+      --border-color: #333;
+      --input-bg: #222;
+    }
+
+    .light-theme {
+      --bg-color: #f0f0f0;
+      --section-bg: #ffffff;
+      --text-color: #111;
+      --border-color: #ddd;
+      --input-bg: #f5f5f5;
+    }
+    
     * {
       box-sizing: border-box;
     }
@@ -16,8 +34,8 @@
     body {
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
-      background: #111;
-      color: #eee;
+      background: var(--bg-color);
+      color: var(--text-color);
       text-align: center;
       padding: 20px;
       margin: 0;
@@ -25,10 +43,11 @@
       min-height: 100vh;
       position: relative;
       padding-bottom: 60px;
+      transition: background-color 0.3s, color 0.3s;
     }
     
     h1 {
-      color: #0f0;
+      color: var(--accent-color);
       margin-bottom: 10px;
       font-size: 28px;
     }
@@ -39,10 +58,10 @@
       justify-content: center;
       gap: 5px;
       margin: 20px 0;
-      background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+      background: linear-gradient(135deg, var(--section-bg) 0%, color-mix(in srgb, var(--section-bg) 80%, #000) 100%);
       padding: 10px;
       border-radius: 12px;
-      border: 1px solid #333;
+      border: 1px solid var(--border-color);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
@@ -52,8 +71,8 @@
       font-size: 14px;
       padding: 12px 24px;
       cursor: pointer;
-      background: #333;
-      color: white;
+      background: color-mix(in srgb, var(--section-bg) 60%, #000);
+      color: var(--text-color);
       border: none;
       border-radius: 8px;
       transition: all 0.3s;
@@ -62,14 +81,14 @@
     }
     
     .tab-btn:hover {
-      background: #555;
+      background: color-mix(in srgb, var(--section-bg) 40%, #000);
       transform: translateY(-2px);
     }
     
     .tab-btn.active {
-      background: #0f8;
+      background: var(--accent-color);
       color: #111;
-      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 4px 12px var(--accent-shadow);
     }
     
     .tab-content {
@@ -88,11 +107,13 @@
     
     /* Общие стили для всех вкладок */
     .section {
-      background: #1a1a1a;
+      background: var(--section-bg);
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
       text-align: left;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
     }
     
     .toolbar {
@@ -109,8 +130,8 @@
       font-size: 14px;
       padding: 10px 18px;
       cursor: pointer;
-      background: #333;
-      color: white;
+      background: color-mix(in srgb, var(--section-bg) 60%, #000);
+      color: var(--text-color);
       border: none;
       border-radius: 8px;
       transition: all 0.3s;
@@ -120,14 +141,14 @@
     }
     
     .tool-btn:hover {
-      background: #555;
+      background: color-mix(in srgb, var(--section-bg) 40%, #000);
       transform: translateY(-2px);
     }
     
     .tool-btn.active {
-      background: #0f8;
+      background: var(--accent-color);
       color: #111;
-      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 4px 12px var(--accent-shadow);
     }
     
     .action-btn {
@@ -136,18 +157,18 @@
       font-size: 15px;
       padding: 12px 24px;
       cursor: pointer;
-      background: #2a2a2a;
-      color: white;
-      border: 2px solid #0f8;
+      background: color-mix(in srgb, var(--section-bg) 60%, #000);
+      color: var(--text-color);
+      border: 2px solid var(--accent-color);
       border-radius: 8px;
       transition: all 0.3s;
     }
     
     .action-btn:hover {
-      background: #0f8;
+      background: var(--accent-color);
       color: #111;
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 6px 15px var(--accent-shadow);
     }
     
     .action-btn:active {
@@ -164,7 +185,7 @@
     
     .code-output {
       background: #000;
-      color: #0f0;
+      color: var(--accent-color);
       text-align: left;
       padding: 20px;
       border-radius: 8px;
@@ -187,7 +208,7 @@
       border-radius: 8px;
       z-index: 1000;
       animation: fadeInOut 2s ease-in-out;
-      border: 1px solid #0f8;
+      border: 1px solid var(--accent-color);
     }
     
     @keyframes fadeInOut {
@@ -213,30 +234,31 @@
       align-items: flex-start;
       justify-content: center;
       padding: 15px;
-      background: #1a1a1a;
+      background: var(--section-bg);
       border-radius: 12px;
     }
     
     .row {
       display: flex;
-      gap: 3px; /* Уменьшен gap для большего поля */
-      margin-bottom: 6px; /* Уменьшен margin для большего поля */
+      gap: 3px;
+      margin-bottom: 6px;
     }
     
     .led {
-      width: 26px; /* Увеличен размер светодиода */
-      height: 26px; /* Увеличен размер светодиода */
-      border-radius: 5px; /* Немного увеличен радиус */
-      background: #222;
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--section-bg) 80%, #000);
       cursor: pointer;
       transition: transform 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px; /* Немного увеличен шрифт */
+      font-size: 10px;
       font-weight: bold;
       border: 1px solid transparent;
       position: relative;
+      color: var(--text-color);
     }
     
     .led:hover {
@@ -264,7 +286,7 @@
     }
     
     .led.hole {
-      background: #222 !important;
+      background: color-mix(in srgb, var(--section-bg) 80%, #000) !important;
       border-width: 2px;
     }
     
@@ -273,7 +295,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 9px; /* Немного увеличен шрифт */
+      font-size: 9px;
       font-weight: bold;
       pointer-events: none;
     }
@@ -292,16 +314,16 @@
     label {
       display: block;
       margin: 8px 0 5px;
-      color: #0f8;
+      color: var(--accent-color);
       font-size: 14px;
     }
     
     input, select, textarea {
       width: 100%;
       padding: 10px;
-      background: #222;
-      border: 1px solid #444;
-      color: #eee;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
       border-radius: 8px;
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
@@ -335,7 +357,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #222;
+      background: var(--input-bg);
       padding: 10px 18px;
       border-radius: 25px;
       transition: all 0.3s;
@@ -343,8 +365,8 @@
     }
     
     .visual-control:hover {
-      background: #333;
-      border-color: #0f8;
+      background: color-mix(in srgb, var(--input-bg) 90%, #000);
+      border-color: var(--accent-color);
     }
     
     .visual-control input[type="checkbox"] {
@@ -352,8 +374,8 @@
       -webkit-appearance: none;
       width: 22px;
       height: 22px;
-      background: #444;
-      border: 2px solid #666;
+      background: color-mix(in srgb, var(--input-bg) 80%, #000);
+      border: 2px solid var(--border-color);
       border-radius: 6px;
       cursor: pointer;
       position: relative;
@@ -361,8 +383,8 @@
     }
     
     .visual-control input[type="checkbox"]:checked {
-      background: #0f8;
-      border-color: #0f8;
+      background: var(--accent-color);
+      border-color: var(--accent-color);
     }
     
     .visual-control input[type="checkbox"]:checked::after {
@@ -378,7 +400,7 @@
     
     .visual-control label {
       cursor: pointer;
-      color: #eee;
+      color: var(--text-color);
       margin: 0;
       font-size: 14px;
     }
@@ -387,7 +409,7 @@
     .scheme {
       margin: 20px auto;
       padding: 20px;
-      background: #1a1a1a;
+      background: var(--section-bg);
       border-radius: 12px;
       max-width: 650px;
     }
@@ -398,17 +420,17 @@
       margin-bottom: 12px;
       padding: 8px;
       border-radius: 6px;
-      background: #222;
+      background: var(--input-bg);
     }
     
     .scheme-direction {
       font-size: 14px;
-      color: #0f8;
+      color: var(--accent-color);
     }
     
     .scheme-info {
       font-size: 13px;
-      color: #aaa;
+      color: color-mix(in srgb, var(--text-color) 60%, transparent);
     }
     
     /* Стили для легенды */
@@ -425,14 +447,14 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      background: #222;
+      background: var(--input-bg);
       padding: 12px;
       border-radius: 10px;
       transition: all 0.3s;
     }
     
     .legend-item:hover {
-      background: #333;
+      background: color-mix(in srgb, var(--input-bg) 90%, #000);
       transform: translateY(-3px);
     }
     
@@ -449,7 +471,7 @@
     
     .legend-text {
       font-size: 13px;
-      color: #ccc;
+      color: color-mix(in srgb, var(--text-color) 80%, transparent);
       text-align: center;
       line-height: 1.3;
     }
@@ -475,14 +497,14 @@
     }
     
     .legend-color.hole {
-      background: #222;
+      background: color-mix(in srgb, var(--section-bg) 80%, #000);
       border: 2px solid #888;
       color: white;
     }
     
     /* Стили для списка сетей */
     .networks-list {
-      background: #222;
+      background: var(--input-bg);
       border-radius: 10px;
       padding: 15px;
       margin-top: 15px;
@@ -494,7 +516,7 @@
       gap: 10px;
       margin-bottom: 8px;
       padding: 8px;
-      background: #333;
+      background: color-mix(in srgb, var(--input-bg) 80%, #000);
       border-radius: 6px;
     }
     
@@ -507,7 +529,7 @@
     
     .network-info {
       font-size: 13px;
-      color: #ccc;
+      color: color-mix(in srgb, var(--text-color) 80%, transparent);
     }
     
     /* Подвал */
@@ -517,13 +539,13 @@
       left: 0;
       right: 0;
       height: 50px;
-      background: #1a1a1a;
-      color: #888;
+      background: var(--section-bg);
+      color: color-mix(in srgb, var(--text-color) 60%, transparent);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      border-top: 1px solid #333;
+      border-top: 1px solid var(--border-color);
     }
     
     /* Адаптивные стили */
@@ -547,7 +569,7 @@
       }
       
       .led {
-        width: 22px; /* Немного уменьшаем для мобильных */
+        width: 22px;
         height: 22px;
       }
       
@@ -564,8 +586,8 @@
       right: 20px;
       width: 40px;
       height: 40px;
-      background: #333;
-      border: 1px solid #444;
+      background: color-mix(in srgb, var(--section-bg) 60%, #000);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       cursor: pointer;
       z-index: 1000;
@@ -580,13 +602,13 @@
     }
     
     .settings-btn:hover {
-      background: #444;
+      background: color-mix(in srgb, var(--section-bg) 40%, #000);
     }
     
     .gear-icon {
       width: 20px;
       height: 20px;
-      fill: #0f8;
+      fill: var(--accent-color);
       transition: transform 0.3s;
     }
     
@@ -596,8 +618,8 @@
       position: fixed;
       top: 70px;
       right: 20px;
-      background: #1a1a1a;
-      border: 1px solid #333;
+      background: var(--section-bg);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 20px;
       z-index: 1001;
@@ -612,13 +634,13 @@
     .setting-item label {
       display: block;
       margin-bottom: 8px;
-      color: #0f8;
+      color: var(--accent-color);
       font-size: 14px;
     }
     
     /* Подложка для инструментов редактора */
     .editor-tools-container {
-      background: #222;
+      background: var(--input-bg);
       border-radius: 12px;
       padding: 20px;
       margin: 15px 0;
@@ -640,13 +662,13 @@
       background: rgba(255, 255, 255, 0.05);
       padding: 8px;
       border-radius: 6px;
-      border: 1px solid #333;
+      border: 1px solid var(--border-color);
       width: 100%;
     }
     
     .small-tool {
       padding: 6px 12px;
-      background: #333;
+      background: color-mix(in srgb, var(--section-bg) 60%, #000);
       border: 2px solid transparent;
       border-radius: 6px;
       cursor: pointer;
@@ -655,7 +677,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      color: #ccc;
+      color: color-mix(in srgb, var(--text-color) 80%, transparent);
       font-weight: 600;
       flex: 1;
       min-width: 70px;
@@ -663,16 +685,16 @@
     }
     
     .small-tool:hover {
-      background: #444;
+      background: color-mix(in srgb, var(--section-bg) 40%, #000);
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
     .small-tool.active {
-      background: #0f8;
+      background: var(--accent-color);
       color: #111;
-      border-color: #0f8;
-      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 12px var(--accent-shadow);
     }
     
     /* Ползунки в генераторе */
@@ -683,7 +705,7 @@
     }
     
     .slider-container {
-      background: #222;
+      background: var(--input-bg);
       padding: 15px;
       border-radius: 10px;
     }
@@ -695,7 +717,7 @@
     }
     
     .slider-value {
-      color: #0f8;
+      color: var(--accent-color);
       font-weight: bold;
     }
     
@@ -703,7 +725,7 @@
       width: 100%;
       height: 8px;
       -webkit-appearance: none;
-      background: #333;
+      background: color-mix(in srgb, var(--input-bg) 80%, #000);
       border-radius: 4px;
       outline: none;
     }
@@ -712,7 +734,7 @@
       -webkit-appearance: none;
       width: 20px;
       height: 20px;
-      background: #0f8;
+      background: var(--accent-color);
       border-radius: 50%;
       cursor: pointer;
     }
@@ -723,27 +745,27 @@
     }
     
     .spoiler-header {
-      background: #222;
+      background: var(--input-bg);
       padding: 12px 20px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid #333;
+      border: 1px solid var(--border-color);
       transition: all 0.3s;
     }
     
     .spoiler-header:hover {
-      background: #2a2a2a;
+      background: color-mix(in srgb, var(--input-bg) 90%, #000);
     }
     
     .spoiler-content {
       display: none;
       padding: 20px;
-      background: #1a1a1a;
+      background: var(--section-bg);
       border-radius: 0 0 8px 8px;
-      border: 1px solid #333;
+      border: 1px solid var(--border-color);
       border-top: none;
     }
     
@@ -763,7 +785,7 @@
     .solution-step {
       margin: 12px 0;
       padding-left: 20px;
-      border-left: 3px solid #0f8;
+      border-left: 3px solid var(--accent-color);
       font-size: 14px;
     }
     
@@ -771,7 +793,7 @@
       display: inline-block;
       width: 26px;
       height: 26px;
-      background: #0f8;
+      background: var(--accent-color);
       color: #111;
       border-radius: 50%;
       text-align: center;
@@ -789,15 +811,114 @@
     }
     
     .solution-title {
-      color: #0f8;
+      color: var(--accent-color);
       margin-top: 0;
       margin-bottom: 15px;
       font-size: 18px;
+    }
+    
+    /* Блокировка PIN-кодом */
+    #pinOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #pinOverlay.active {
+      display: flex;
+    }
+    
+    .pin-container {
+      background: var(--section-bg);
+      padding: 40px;
+      border-radius: 20px;
+      border: 2px solid var(--accent-color);
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .pin-title {
+      color: var(--accent-color);
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .pin-input {
+      width: 100%;
+      padding: 15px;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 10px;
+      background: var(--input-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      font-family: monospace;
+    }
+    
+    .pin-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+    
+    .pin-message {
+      color: #ff5555;
+      margin-top: 10px;
+      min-height: 24px;
+    }
+    
+    /* Цветные кружочки для выбора темы */
+    .theme-colors {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .color-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .color-circle:hover {
+      transform: scale(1.1);
+    }
+    
+    .color-circle.selected {
+      border-color: white;
+      box-shadow: 0 0 0 2px var(--current-color);
     }
   </style>
 </head>
 <body>
   <h1>MouseGame: Эмулятор, Редактор и Генератор уровней</h1>
+
+  <!-- Оверлей для PIN-кода -->
+  <div id="pinOverlay">
+    <div class="pin-container">
+      <div class="pin-title">Введите PIN-код</div>
+      <input type="password" class="pin-input" id="pinInput" maxlength="4" pattern="\d*" inputmode="numeric">
+      <div class="pin-message" id="pinMessage"></div>
+      <button class="action-btn" id="pinSubmit">Разблокировать</button>
+      <div style="margin-top: 20px; color: #888; font-size: 14px;">
+        По умолчанию: 0000
+      </div>
+    </div>
+  </div>
 
   <!-- Кнопка настроек -->
   <button class="settings-btn" id="settingsBtn">
@@ -806,18 +927,8 @@
     </svg>
   </button>
 
-  <!-- Модальное окно настроек -->
   <div class="settings-modal" id="settingsModal">
-    <h3 style="color: #0f8; margin-top: 0;">Настройки</h3>
-    
-    <div class="setting-item">
-      <label for="holeIndexStyle">Отображение номеров нор:</label>
-      <select id="holeIndexStyle">
-        <option value="network">Номер в сети</option>
-        <option value="global">Глобальный индекс</option>
-        <option value="both">Оба варианта</option>
-      </select>
-    </div>
+    <h3 style="color: var(--accent-color); margin-top: 0;">Настройки</h3>
     
     <div class="setting-item">
       <label for="solutionSpeed">Скорость показа решения:</label>
@@ -828,6 +939,37 @@
       </select>
     </div>
     
+    <div class="setting-item">
+      <label>Тема интерфейса:</label>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button class="action-btn" id="themeDark" style="flex: 1;">🌙 Тёмная</button>
+        <button class="action-btn" id="themeLight" style="flex: 1;">☀ Светлая</button>
+      </div>
+    </div>
+    
+    <div class="setting-item">
+      <label>Цвет акцентов:</label>
+      <div class="theme-colors">
+        <div class="color-circle" data-color="#0f8" style="background-color: #0f8;" title="Зеленый (по умолчанию)"></div>
+        <div class="color-circle" data-color="#ff9900" style="background-color: #ff9900;" title="Оранжевый"></div>
+        <div class="color-circle" data-color="#ff3366" style="background-color: #ff3366;" title="Розовый"></div>
+        <div class="color-circle" data-color="#3366ff" style="background-color: #3366ff;" title="Синий"></div>
+        <div class="color-circle" data-color="#9933ff" style="background-color: #9933ff;" title="Фиолетовый"></div>
+        <div class="color-circle" data-color="#00cc99" style="background-color: #00cc99;" title="Бирюзовый"></div>
+      </div>
+    </div>
+    
+    <div class="setting-item">
+      <div class="visual-control">
+        <input type="checkbox" id="pinLockEnabled">
+        <label for="pinLockEnabled">Блокировка PIN-кодом</label>
+      </div>
+      <div id="pinSettings" style="margin-top: 10px; display: none;">
+        <input type="password" id="pinCode" placeholder="Введите новый PIN (4 цифры)" maxlength="4" pattern="\d*" style="width: 100%; margin-bottom: 5px;">
+        <div style="color: #888; font-size: 12px;">При перезагрузке потребуется ввод PIN-кода</div>
+      </div>
+    </div>
+    
     <button class="action-btn" id="closeSettings" style="width: 100%; margin-top: 20px;">Закрыть</button>
   </div>
 
@@ -835,12 +977,13 @@
     <button class="tab-btn" data-tab="emulator">Эмулятор</button>
     <button class="tab-btn active" data-tab="editor">Редактор</button>
     <button class="tab-btn" data-tab="generator">Генератор</button>
+    <button class="tab-btn" data-tab="device">Устройство</button>
   </div>
 
   <!-- Вкладка Эмулятора -->
   <div id="emulator" class="tab-content">
     <div class="section">
-      <h3 style="color: #0f8; margin-top: 0; text-align: center;">Эмулятор игры MouseGame</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; text-align: center;">Эмулятор игры MouseGame</h3>
       <div class="status" id="emulatorStatus">Загрузите уровень для игры</div>
       
       <div class="level-settings">
@@ -898,7 +1041,7 @@
   <!-- Вкладка Редактора -->
   <div id="editor" class="tab-content active">
     <div class="section">
-      <h3 style="color: #0f8; margin-top: 0; text-align: center;">Редактор уровней MouseGame</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; text-align: center;">Редактор уровней MouseGame</h3>
       
       <div class="editor-tools-container">
         <!-- Основные инструменты -->
@@ -913,7 +1056,7 @@
               <span>✎</span> Свободная разметка
             </button>
             
-            <!-- Маленькие кнопки тропы и мешка - ПРЯМО ПОД свободной разметкой -->
+            <!-- Маленькие кнопки тропы и мешка -->
             <div class="sub-toolbar" style="display: none;">
               <div class="small-tool" data-quick="path" style="color: yellow;">
                 <span>T</span> Тропа
@@ -969,12 +1112,12 @@
     </div>
 
     <div class="section" id="infoPanel" style="display: none;">
-      <h3 style="color: #0f8; margin-top: 0;">Информация о клетке</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0;">Информация о клетке</h3>
       <div id="infoDetails" style="font-family: monospace; font-size: 14px; line-height: 1.5;"></div>
     </div>
     
     <div class="section networks-list" id="networksList" style="display: none;">
-      <h4 style="color: #0f8; margin-top: 0;">Текущие сети нор:</h4>
+      <h4 style="color: var(--accent-color); margin-top: 0;">Текущие сети нор:</h4>
       <div id="networksListContent"></div>
     </div>
 
@@ -982,6 +1125,7 @@
       <button class="action-btn" id="exportBtn">Экспортировать код уровня</button>
       <button class="action-btn" id="exportToEmulatorBtn">Экспорт в эмулятор</button>
       <button class="action-btn" id="copyBtn">Копировать в буфер</button>
+      <button class="action-btn" id="exportToDeviceBtn">Экспорт в менеджер уровней</button>
     </div>
 
     <div class="section">
@@ -1014,7 +1158,7 @@
     </div>
 
     <div class="scheme">
-      <h3 style="color: #0f8; margin-top: 0; text-align: center;">Схема змейки (180 светодиодов)</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; text-align: center;">Схема змейки (180 светодиодов)</h3>
       <div class="scheme-row">
         <div class="scheme-direction">→ Слева направо</div>
         <div class="scheme-info">Строка 1: светодиоды 0-37 (38 шт)</div>
@@ -1041,7 +1185,7 @@
   <!-- Вкладка Генератора -->
   <div id="generator" class="tab-content">
     <div class="section">
-      <h3 style="color: #0f8; margin-top: 0; text-align: center;">Генератор уровней MouseGame</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; text-align: center;">Генератор уровней MouseGame</h3>
       
       <div class="level-settings">
         <div class="setting">
@@ -1095,18 +1239,19 @@
         <button class="action-btn" id="generatorCopyBtn">Копировать код</button>
         <button class="action-btn" id="generatorLoadBtn">Загрузить в редактор</button>
         <button class="action-btn" id="generatorLoadEmulatorBtn">Загрузить в эмулятор</button>
+        <button class="action-btn" id="generatorExportToDeviceBtn">Экспорт в менеджер</button>
       </div>
     </div>
     
     <div class="section">
-      <h3 style="color: #0f8; margin-top: 0; margin-bottom: 15px;">Предпросмотр уровня</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 15px;">Предпросмотр уровня</h3>
       <div class="strip-container">
         <div class="strip" id="generatorStrip"></div>
       </div>
     </div>
     
     <div class="section">
-      <h3 style="color: #0f8; margin-top: 0; margin-bottom: 15px;">Код сгенерированного уровня</h3>
+      <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 15px;">Код сгенерированного уровня</h3>
       <div class="code-output" id="generatorCodeOutput">
         // Сгенерированный код появится здесь
       </div>
@@ -1127,6 +1272,58 @@
     </div>
   </div>
 
+  <!-- Вкладка Устройства -->
+  <div id="device" class="tab-content">
+    <div class="section">
+      <h3 style="color: var(--accent-color); margin-top: 0; text-align: center;">Управление уровнями для устройства</h3>
+      
+      <div class="toolbar">
+        <button class="action-btn" id="importLevelsBtn">📁 Импорт файла levels.h</button>
+        <button class="action-btn" id="exportLevelsBtn">💾 Экспорт в levels.h</button>
+        <button class="action-btn" id="refreshLevelsBtn">🔄 Обновить список</button>
+      </div>
+      
+      <div class="status" id="deviceStatus">Загрузите файл levels.h или создайте уровни в редакторе</div>
+      
+      <div class="level-settings">
+        <div class="setting">
+          <label for="maxLevels">Макс. количество уровней в файле:</label>
+          <input type="number" id="maxLevels" min="1" max="100" value="50">
+        </div>
+      </div>
+      
+      <div class="section" id="levelsListContainer" style="display: none;">
+        <h4 style="color: var(--accent-color);">Список уровней:</h4>
+        <div id="levelsList" style="max-height: 400px; overflow-y: auto; margin-top: 10px;">
+          <!-- Уровни будут загружены здесь -->
+        </div>
+      </div>
+      
+      <div class="section">
+        <h4 style="color: var(--accent-color);">Предпросмотр файла levels.h:</h4>
+        <div class="code-output" id="levelsPreview" style="font-size: 11px; line-height: 1.2;">
+          // Загрузите файл или создайте уровни
+        </div>
+      </div>
+      
+      <div class="controls">
+        <button class="action-btn" id="saveLevelsBtn">💾 Сохранить в файл</button>
+        <button class="action-btn" id="clearLevelsBtn">🗑️ Очистить все уровни</button>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h3 style="color: var(--accent-color); margin-top: 0;">Инструкция</h3>
+      <div style="text-align: left; line-height: 1.5;">
+        <p>1. Создайте уровни в <strong>Редакторе</strong> или <strong>Генераторе</strong></p>
+        <p>2. Экспортируйте уровни в менеджер кнопкой "Экспорт в менеджер уровней"</p>
+        <p>3. Загрузите существующий файл levels.h (если есть) для редактирования</p>
+        <p>4. Отредактируйте уровни: измените порядок, названия, сложность</p>
+        <p>5. Экспортируйте готовый файл levels.h для загрузки в Arduino</p>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div>Тимофей Любушкин, 2026</div>
   </footer>
@@ -1139,11 +1336,11 @@
     const NUM_LEDS = 180;
     const TOTAL_ROWS = 5;
     const ROWS = [
-      { start: 0,   count: 38 },  // строка 0
-      { start: 38,  count: 38 },  // строка 1
-      { start: 76,  count: 38 },  // строка 2
-      { start: 114, count: 38 },  // строка 3
-      { start: 152, count: 28 }   // строка 4
+      { start: 0,   count: 38 },
+      { start: 38,  count: 38 },
+      { start: 76,  count: 38 },
+      { start: 114, count: 38 },
+      { start: 152, count: 28 }
     ];
 
     // Типы элементов
@@ -1163,6 +1360,102 @@
       '#FF3333', '#33FF33', '#3333FF', '#FFFF33', '#FF33FF', '#33FFFF',
       '#FF9933', '#9933FF', '#3399FF', '#FF3399', '#99FF33', '#33FF99'
     ];
+
+    // =============================================
+    // НОВЫЕ НАСТРОЙКИ И PIN-КОД
+    // =============================================
+
+    // Настройки приложения
+    let appSettings = {
+      theme: 'dark',
+      accentColor: '#0f8',
+      pinLockEnabled: false,
+      pinCode: '0000',
+      solutionSpeed: 300
+    };
+
+    // Загрузка настроек из localStorage
+    function loadSettings() {
+      const saved = localStorage.getItem('mousegame_settings');
+      if (saved) {
+        appSettings = { ...appSettings, ...JSON.parse(saved) };
+      }
+      applySettings();
+    }
+
+    // Сохранение настроек
+    function saveSettings() {
+      localStorage.setItem('mousegame_settings', JSON.stringify(appSettings));
+      applySettings();
+    }
+
+    // Применение настроек
+    function applySettings() {
+      // Применение темы
+      if (appSettings.theme === 'light') {
+        document.body.classList.add('light-theme');
+      } else {
+        document.body.classList.remove('light-theme');
+      }
+      
+      // Применение цвета акцентов
+      document.documentElement.style.setProperty('--accent-color', appSettings.accentColor);
+      
+      // Создаем более темную версию для тени
+      const rgb = hexToRgb(appSettings.accentColor);
+      const shadowColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
+      document.documentElement.style.setProperty('--accent-shadow', shadowColor);
+      
+      // Обновляем выбранный цвет в настройках
+      updateColorSelector();
+      
+      // Обновляем решение скорости
+      const solutionSpeedSelect = document.getElementById('solutionSpeed');
+      if (solutionSpeedSelect) {
+        solutionSpeedSelect.value = appSettings.solutionSpeed;
+      }
+    }
+
+    // Преобразование HEX в RGB
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 0, g: 0, b: 0 };
+    }
+
+    // Обновление выбора цвета в настройках
+    function updateColorSelector() {
+      const circles = document.querySelectorAll('.color-circle');
+      circles.forEach(circle => {
+        circle.classList.remove('selected');
+        if (circle.dataset.color === appSettings.accentColor) {
+          circle.classList.add('selected');
+          circle.style.setProperty('--current-color', appSettings.accentColor);
+        }
+      });
+    }
+
+    // Показать блокировку PIN-кодом
+    function showPinLock() {
+      const overlay = document.getElementById('pinOverlay');
+      overlay.classList.add('active');
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinMessage').textContent = '';
+      document.getElementById('pinInput').focus();
+    }
+
+    // Скрыть блокировку PIN-кодом
+    function hidePinLock() {
+      document.getElementById('pinOverlay').classList.remove('active');
+    }
+
+    // Проверка PIN-кода
+    function checkPinCode(input) {
+      return input === appSettings.pinCode;
+    }
 
     // =============================================
     // ФУНКЦИИ ОБЩЕГО НАЗНАЧЕНИЯ
@@ -1187,11 +1480,11 @@
 
     // Получить строку по позиции
     function getRow(pos) {
-      if (pos < 38) return 0;   // Строка 0
-      if (pos < 76) return 1;   // Строка 1
-      if (pos < 114) return 2;  // Строка 2
-      if (pos < 152) return 3;  // Строка 3
-      return 4;                 // Строка 4 (короткая)
+      if (pos < 38) return 0;
+      if (pos < 76) return 1;
+      if (pos < 114) return 2;
+      if (pos < 152) return 3;
+      return 4;
     }
 
     // Функция для переключения спойлера
@@ -1205,6 +1498,14 @@
     // =============================================
 
     document.addEventListener('DOMContentLoaded', function() {
+      // Загружаем настройки
+      loadSettings();
+      
+      // Проверка блокировки PIN-кодом
+      if (appSettings.pinLockEnabled) {
+        showPinLock();
+      }
+      
       // Инициализация вкладок
       const tabButtons = document.querySelectorAll('.tab-btn');
       const tabContents = document.querySelectorAll('.tab-content');
@@ -1213,31 +1514,30 @@
         button.addEventListener('click', () => {
           const tabId = button.dataset.tab;
           
-          // Удаляем активный класс у всех кнопок и контента
           tabButtons.forEach(btn => btn.classList.remove('active'));
           tabContents.forEach(content => content.classList.remove('active'));
           
-          // Добавляем активный класс текущей кнопке и контенту
           button.classList.add('active');
           document.getElementById(tabId).classList.add('active');
           
-          // Скрываем модальное окно настроек при переключении вкладок
           document.getElementById('settingsModal').style.display = 'none';
           
-          // При переключении на редактор обновляем отображение
           if (tabId === 'editor') {
             updateVisuals();
             updateNetworksList();
           }
           
-          // При переключении на эмулятор обновляем отображение
           if (tabId === 'emulator') {
             updateEmulatorDisplay();
           }
           
-          // При переключении на генератор обновляем отображение
           if (tabId === 'generator') {
             updateGeneratorDisplay();
+          }
+          
+          if (tabId === 'device') {
+            updateLevelsList();
+            updateLevelsPreview();
           }
         });
       });
@@ -1249,6 +1549,7 @@
       initSmallTools();
       initGeneratorSliders();
       initSettings();
+      initDeviceManager();
       
       // Обновляем отображение нор в легенде
       const holeLegend = document.querySelector('.legend-text');
@@ -1273,7 +1574,6 @@
           settingsModal.style.display = 'none';
         });
         
-        // Закрытие модального окна при клике вне его
         document.addEventListener('click', function(event) {
           if (!settingsModal.contains(event.target) && 
               !settingsBtn.contains(event.target) &&
@@ -1282,6 +1582,69 @@
           }
         });
       }
+      
+      // Настройки темы
+      document.getElementById('themeDark').addEventListener('click', function() {
+        appSettings.theme = 'dark';
+        saveSettings();
+      });
+      
+      document.getElementById('themeLight').addEventListener('click', function() {
+        appSettings.theme = 'light';
+        saveSettings();
+      });
+      
+      // Настройки цвета
+      document.querySelectorAll('.color-circle').forEach(circle => {
+        circle.addEventListener('click', function() {
+          appSettings.accentColor = this.dataset.color;
+          saveSettings();
+        });
+      });
+      
+      // Настройки PIN-кода
+      document.getElementById('pinLockEnabled').addEventListener('change', function() {
+        appSettings.pinLockEnabled = this.checked;
+        document.getElementById('pinSettings').style.display = this.checked ? 'block' : 'none';
+        saveSettings();
+      });
+      
+      document.getElementById('pinCode').addEventListener('input', function() {
+        if (this.value.length === 4 && /^\d+$/.test(this.value)) {
+          appSettings.pinCode = this.value;
+          saveSettings();
+          showNotification('PIN-код обновлен');
+        }
+      });
+      
+      // Настройки скорости решения
+      document.getElementById('solutionSpeed').addEventListener('change', function() {
+        appSettings.solutionSpeed = this.value;
+        saveSettings();
+      });
+      
+      // Проверяем начальное состояние PIN-блокировки
+      document.getElementById('pinLockEnabled').checked = appSettings.pinLockEnabled;
+      document.getElementById('pinSettings').style.display = appSettings.pinLockEnabled ? 'block' : 'none';
+      document.getElementById('pinCode').value = appSettings.pinCode;
+      
+      // Обработка PIN-ввода
+      document.getElementById('pinSubmit').addEventListener('click', function() {
+        const input = document.getElementById('pinInput').value;
+        if (checkPinCode(input)) {
+          hidePinLock();
+        } else {
+          document.getElementById('pinMessage').textContent = 'Неверный PIN-код';
+          document.getElementById('pinInput').value = '';
+          document.getElementById('pinInput').focus();
+        }
+      });
+      
+      document.getElementById('pinInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('pinSubmit').click();
+        }
+      });
     }
 
     // =============================================
@@ -1290,13 +1653,13 @@
 
     // Глобальные переменные редактора
     let networks = new Array(NUM_LEDS).fill(ELEMENT_TYPES.EMPTY);
-    let currentMode = 'free'; // none, free, hole, select-finish, info
+    let currentMode = 'free';
     let holeNetwork = [];
-    let holeNetworks = []; // Массив всех сетей нор
+    let holeNetworks = [];
     let finishPos = 179;
-    let showAllIndices = false; // Флаг для отображения индексов всех клеток
-    let showHoleIndices = false; // Флаг для отображения индексов нор
-    let currentQuickTool = null; // Быстрый инструмент: null, 'path', 'bag'
+    let showAllIndices = false;
+    let showHoleIndices = false;
+    let currentQuickTool = null;
     
     // DOM элементы редактора
     const editorStripEl = document.getElementById('editorStrip');
@@ -1304,6 +1667,7 @@
     const exportBtn = document.getElementById('exportBtn');
     const exportToEmulatorBtn = document.getElementById('exportToEmulatorBtn');
     const copyBtn = document.getElementById('copyBtn');
+    const exportToDeviceBtn = document.getElementById('exportToDeviceBtn');
     const toolButtons = document.querySelectorAll('.toolbar .tool-btn');
     const smallTools = document.querySelectorAll('.small-tool');
     const infoPanel = document.getElementById('infoPanel');
@@ -1357,18 +1721,37 @@
           return;
         }
         
-        // Переключаемся на эмулятор
         document.querySelector('[data-tab="emulator"]').click();
         
-        // Устанавливаем пользовательский уровень
         document.getElementById('emulatorLevel').value = 'custom';
         document.getElementById('customLevelSection').style.display = 'block';
         document.getElementById('emulatorCustomCode').value = code;
         
-        // Загружаем уровень
         loadCustomLevelToEmulator();
         
         showNotification('Уровень экспортирован в эмулятор');
+      });
+      
+      // Экспорт в менеджер уровней
+      exportToDeviceBtn.addEventListener('click', function() {
+        const code = generateLevelCode();
+        if (code.includes('// Ошибка')) {
+          showNotification('Сначала создайте уровень');
+          return;
+        }
+        
+        const levelName = document.getElementById('levelName').value;
+        const levelNum = document.getElementById('levelNum').value;
+        
+        // Создаем превью данных
+        const previewData = {
+          networks: [...networks],
+          finishPos: finishPos,
+          holeNetworks: [...holeNetworks]
+        };
+        
+        addLevelToManager(code, levelName, previewData);
+        document.querySelector('[data-tab="device"]').click();
       });
       
       // Копирование в буфер
@@ -1389,7 +1772,6 @@
         });
       });
       
-      // Обновляем отображение
       updateVisuals();
     }
 
@@ -1399,24 +1781,17 @@
         tool.addEventListener('click', () => {
           const toolType = tool.dataset.quick;
           
-          // Если нажали на уже активный инструмент - отключаем его
           if (currentQuickTool === toolType) {
             currentQuickTool = null;
             tool.classList.remove('active');
-            // Включаем свободную разметку при отключении маленького инструмента
             setMode('free');
-            // Обновляем визуализацию (убираем затемнение)
             updateVisuals();
           } else {
-            // Включаем выбранный инструмент
             currentQuickTool = toolType;
             smallTools.forEach(t => t.classList.remove('active'));
             tool.classList.add('active');
             
-            // Устанавливаем режим free (для рисования)
             setMode('free');
-            
-            // Обновляем визуализацию
             updateVisuals();
           }
         });
@@ -1431,36 +1806,29 @@
         const rowEl = document.createElement('div');
         rowEl.className = 'row';
         
-        // Определяем направление строки
-        const isReversed = rowIndex % 2 === 1; // Нечетные строки идут справа налево
+        const isReversed = rowIndex % 2 === 1;
         
-        // Создаем массив индексов для этой строки
         let indices = [];
         for (let i = row.start; i < row.start + row.count; i++) {
           indices.push(i);
         }
         
-        // Если строка обратная, переворачиваем порядок
         if (isReversed) {
           indices.reverse();
         }
         
-        // Создаем светодиоды в правильном порядке
         indices.forEach(index => {
           const led = document.createElement('div');
           led.className = 'led';
           led.id = `editor-led-${index}`;
           
-          // Создаем элемент для номера норы
           const numberEl = document.createElement('div');
           numberEl.className = 'led-hole-number';
           led.appendChild(numberEl);
           
-          // Добавляем классы для стартовой и финишной позиций
           if (index === 0) led.classList.add('start');
           if (index === finishPos) led.classList.add('finish');
           
-          // Обработчик клика
           led.addEventListener('click', () => handleLedClick(index));
           
           rowEl.appendChild(led);
@@ -1478,7 +1846,6 @@
         
         const numberEl = led.querySelector('.led-hole-number');
         
-        // Сбрасываем классы и стили
         led.classList.remove('start', 'finish', 'bag', 'path', 'hole', 'editing');
         led.style.borderColor = 'transparent';
         led.style.backgroundColor = '';
@@ -1488,20 +1855,16 @@
           numberEl.style.color = '#fff';
         }
         
-        // Если включен режим маленького инструмента, затемняем нерелевантные элементы
         if (currentQuickTool === 'path') {
-          // В режиме тропинки затемняем все, кроме тропинок, старта и финиша
           if (networks[i] !== ELEMENT_TYPES.PATH && i !== 0 && i !== finishPos) {
             led.style.opacity = '0.3';
           }
         } else if (currentQuickTool === 'bag') {
-          // В режиме мешков затемняем все, кроме мешков, старта и финиша
           if (networks[i] !== ELEMENT_TYPES.BAG && i !== 0 && i !== finishPos) {
             led.style.opacity = '0.3';
           }
         }
         
-        // Добавляем классы в зависимости от типа
         if (i === 0) {
           led.classList.add('start');
           led.style.backgroundColor = 'blue';
@@ -1515,15 +1878,13 @@
           led.classList.add('path');
           led.style.backgroundColor = 'yellow';
           numberEl.style.color = '#111';
-        } else if (networks[i] < 180) { // Это нора
+        } else if (networks[i] < 180) {
           led.classList.add('hole');
           led.style.backgroundColor = '#222';
           
-          // Находим сеть, к которой принадлежит нора
           let foundNetwork = null;
           let holeIndex = -1;
           
-          // Проверяем сохраненные сети
           for (let n = 0; n < holeNetworks.length; n++) {
             const network = holeNetworks[n];
             const index = network.indexOf(i);
@@ -1534,16 +1895,14 @@
             }
           }
           
-          // Проверяем текущую создаваемую сеть
           if (foundNetwork === null && currentMode === 'hole') {
             const index = holeNetwork.indexOf(i);
             if (index !== -1) {
-              foundNetwork = holeNetworks.length; // Предполагаемый индекс для новой сети
+              foundNetwork = holeNetworks.length;
               holeIndex = index;
             }
           }
           
-          // Если нашли сеть, устанавливаем обводку
           if (foundNetwork !== null) {
             const color = getNetworkColor(foundNetwork);
             led.style.borderColor = color;
@@ -1552,12 +1911,9 @@
           }
         }
         
-        // Обработка отображения индексов
         if (showAllIndices) {
-          // Показываем индекс на ВСЕХ клетках
           if (numberEl) {
             numberEl.textContent = i;
-            // Выбираем цвет текста в зависимости от типа клетки
             if (i === 0) {
               numberEl.style.color = 'white';
             } else if (i === finishPos) {
@@ -1566,22 +1922,19 @@
               numberEl.style.color = 'white';
             } else if (networks[i] === ELEMENT_TYPES.PATH) {
               numberEl.style.color = '#111';
-            } else if (networks[i] < 180) { // Нора
+            } else if (networks[i] < 180) {
               numberEl.style.color = '#fff';
             } else {
               numberEl.style.color = '#888';
             }
           }
         } else if (showHoleIndices && networks[i] < 180) {
-          // Показываем индекс только на норах
           if (numberEl) {
             numberEl.textContent = i;
             numberEl.style.color = '#fff';
           }
         } else if (networks[i] < 180) {
-          // Показываем номер в сети для нор
           if (numberEl) {
-            // Находим сеть, к которой принадлежит нора
             let foundNetwork = null;
             let holeIndex = -1;
             
@@ -1595,7 +1948,6 @@
               }
             }
             
-            // Проверяем текущую создаваемую сеть
             if (foundNetwork === null && currentMode === 'hole') {
               const index = holeNetwork.indexOf(i);
               if (index !== -1) {
@@ -1611,10 +1963,8 @@
           }
         }
         
-        // Выделение для режима создания сети
         if (currentMode === 'hole' && holeNetwork.includes(i)) {
           led.classList.add('editing');
-          // Показываем предварительный номер в создаваемой сети
           const index = holeNetwork.indexOf(i);
           if (index !== -1 && numberEl) {
             if (showAllIndices) {
@@ -1631,7 +1981,6 @@
         }
       }
       
-      // Обновляем список сетей
       updateNetworksList();
     }
 
@@ -1658,23 +2007,18 @@
 
     // Обработчик клика по светодиоду в редакторе
     function handleLedClick(pos) {
-      if (pos === 0 && currentMode !== 'info' && currentMode !== 'select-finish') return; // Старт нельзя менять
+      if (pos === 0 && currentMode !== 'info' && currentMode !== 'select-finish') return;
       
-      // Обработка маленьких инструментов
       if (currentQuickTool === 'path') {
-        // Режим только тропинки
         if (pos !== 0 && pos !== finishPos) {
-          // Удаляем нору, если она есть
           if (networks[pos] < 180) {
             removeHoleFromNetworks(pos);
           }
           
-          // Удаляем мешок, если он есть
           if (networks[pos] === ELEMENT_TYPES.BAG) {
             networks[pos] = ELEMENT_TYPES.EMPTY;
           }
           
-          // Переключаем тропинку
           if (networks[pos] === ELEMENT_TYPES.PATH) {
             networks[pos] = ELEMENT_TYPES.EMPTY;
           } else {
@@ -1682,19 +2026,15 @@
           }
         }
       } else if (currentQuickTool === 'bag') {
-        // Режим только мешки
         if (pos !== 0 && pos !== finishPos) {
-          // Удаляем нору, если она есть
           if (networks[pos] < 180) {
             removeHoleFromNetworks(pos);
           }
           
-          // Удаляем тропинку, если она есть
           if (networks[pos] === ELEMENT_TYPES.PATH) {
             networks[pos] = ELEMENT_TYPES.EMPTY;
           }
           
-          // Переключаем мешок
           if (networks[pos] === ELEMENT_TYPES.BAG) {
             networks[pos] = ELEMENT_TYPES.EMPTY;
           } else {
@@ -1702,7 +2042,6 @@
           }
         }
       } else {
-        // Стандартная логика
         switch (currentMode) {
           case 'free':
             cycleElementType(pos);
@@ -1724,18 +2063,15 @@
 
     // Переключение типа элемента (в свободном режиме)
     function cycleElementType(pos) {
-      // Если это финиш, сначала сбрасываем финиш
       if (pos === finishPos) {
         networks[pos] = ELEMENT_TYPES.EMPTY;
         finishPos = -1;
       }
       
-      // Если это нора, удаляем из всех сетей
       if (networks[pos] < 180) {
         removeHoleFromNetworks(pos);
       }
       
-      // Переключаем типы
       switch (networks[pos]) {
         case ELEMENT_TYPES.EMPTY:
           networks[pos] = ELEMENT_TYPES.BAG;
@@ -1744,7 +2080,6 @@
           networks[pos] = ELEMENT_TYPES.PATH;
           break;
         case ELEMENT_TYPES.PATH:
-          // Устанавливаем как финиш, если финиш еще не установлен
           if (finishPos === -1) {
             networks[pos] = ELEMENT_TYPES.FINISH;
             finishPos = pos;
@@ -1759,13 +2094,11 @@
 
     // Удалить нору из всех сетей
     function removeHoleFromNetworks(pos) {
-      // Удаляем из сохраненных сетей
       for (let i = 0; i < holeNetworks.length; i++) {
         const index = holeNetworks[i].indexOf(pos);
         if (index !== -1) {
           holeNetworks[i].splice(index, 1);
           
-          // Если сеть стала пустой, удаляем её
           if (holeNetworks[i].length < 2) {
             holeNetworks.splice(i, 1);
             i--;
@@ -1773,7 +2106,6 @@
         }
       }
       
-      // Удаляем из текущей создаваемой сети
       const index = holeNetwork.indexOf(pos);
       if (index !== -1) {
         holeNetwork.splice(index, 1);
@@ -1784,16 +2116,13 @@
 
     // Добавление в сеть нор
     function addToHoleNetwork(pos) {
-      // Если это уже финиш или старт, игнорируем
       if (pos === finishPos || pos === 0) return;
       
-      // Если светодиод уже в сети, удаляем его
       const index = holeNetwork.indexOf(pos);
       if (index !== -1) {
         holeNetwork.splice(index, 1);
         networks[pos] = ELEMENT_TYPES.EMPTY;
       } else {
-        // Добавляем в сеть
         holeNetwork.push(pos);
         networks[pos] = ELEMENT_TYPES.HOLE;
       }
@@ -1801,19 +2130,15 @@
 
     // Установка финишной позиции
     function setFinishPosition(pos) {
-      // Нельзя установить финиш на старт
       if (pos === 0) return;
       
-      // Сбрасываем предыдущий финиш
       if (finishPos !== -1 && finishPos < NUM_LEDS) {
         networks[finishPos] = ELEMENT_TYPES.EMPTY;
       }
       
-      // Устанавливаем новый финиш
       finishPos = pos;
       networks[pos] = ELEMENT_TYPES.FINISH;
       
-      // Переключаемся обратно в режим свободной разметки
       setMode('free');
       updateToolButtons();
       showNotification('Финиш установлен в позицию ' + pos);
@@ -1821,28 +2146,23 @@
 
     // Установка режима
     function setMode(mode) {
-      // Если выходим из режима создания нор и есть незавершенная сеть
       if (currentMode === 'hole' && mode !== 'hole' && holeNetwork.length > 1) {
-        // Сохраняем длину перед сохранением
         const holeCount = holeNetwork.length;
         saveHoleNetwork();
         showNotification(`Создана сеть нор из ${holeCount} отверстий`);
       } else if (currentMode === 'hole' && mode !== 'hole') {
-        // Если сеть пуста или только одна нора, сбрасываем
         holeNetwork.forEach(pos => {
           networks[pos] = ELEMENT_TYPES.EMPTY;
         });
         holeNetwork = [];
       }
       
-      // Скрываем панель информации при переключении с режима info
       if (currentMode === 'info' && mode !== 'info') {
         infoPanel.style.display = 'none';
       }
       
       currentMode = mode;
       
-      // Показываем/скрываем sub-toolbar
       const subToolbar = document.querySelector('.sub-toolbar');
       const freeToolBtn = document.getElementById('freeToolBtn');
       
@@ -1853,7 +2173,6 @@
         } else {
           subToolbar.style.display = 'none';
           freeToolBtn.classList.remove('active');
-          // Сбрасываем маленькие инструменты при смене режима
           currentQuickTool = null;
           smallTools.forEach(t => t.classList.remove('active'));
         }
@@ -1867,17 +2186,14 @@
     function saveHoleNetwork() {
       if (holeNetwork.length < 2) return;
       
-      // Добавляем сеть в массив сетей
       holeNetworks.push([...holeNetwork]);
       
-      // Создаем циклическую сеть в массиве networks
       for (let i = 0; i < holeNetwork.length; i++) {
         const current = holeNetwork[i];
         const next = holeNetwork[(i + 1) % holeNetwork.length];
         networks[current] = next;
       }
       
-      // Очищаем текущую сеть
       holeNetwork = [];
     }
 
@@ -1894,7 +2210,6 @@
     // Обработчик переключателя индексов всех клеток
     function toggleAllIndices() {
       showAllIndices = showAllIndicesCheckbox.checked;
-      // Если включен показ всех индексов, отключаем показ только нор
       if (showAllIndices) {
         showHoleIndices = false;
         showHoleIndicesCheckbox.checked = false;
@@ -1905,7 +2220,6 @@
     // Обработчик переключателя индексов нор
     function toggleHoleIndices() {
       showHoleIndices = showHoleIndicesCheckbox.checked;
-      // Если включен показ индексов нор и при этом включен показ всех индексов, отключаем показ всех
       if (showHoleIndices && showAllIndices) {
         showAllIndices = false;
         showAllIndicesCheckbox.checked = false;
@@ -1932,28 +2246,23 @@
       showNotification('Поле очищено');
     }
 
-    // Функция для обновления информации о норе (связка 1-2-3)
+    // Функция для обновления информации о норе
     function updateHoleInfo(pos) {
       if (networks[pos] < 180 && networks[pos] >= 0) {
-        // Находим сеть, к которой принадлежит нора
         let network = [];
         let visited = new Set();
         let current = pos;
         
-        // Собираем все норы в сети
         while (!visited.has(current)) {
           visited.add(current);
           network.push(current);
           current = networks[current];
         }
         
-        // Если нашли сеть из нескольких нор
         if (network.length > 1) {
-          // Сортируем по порядку в сети
           let orderedNetwork = [];
           current = pos;
           
-          // Находим начало сети
           while (true) {
             let found = false;
             for (let i = 0; i < NUM_LEDS; i++) {
@@ -1966,17 +2275,14 @@
             if (!found) break;
           }
           
-          // Собираем в порядке следования
           orderedNetwork = [current];
           while (networks[current] !== orderedNetwork[0]) {
             current = networks[current];
             orderedNetwork.push(current);
           }
           
-          // Находим индекс текущей норы
           const index = orderedNetwork.indexOf(pos);
           
-          // Формируем строку связки
           let chain = [];
           for (let i = 0; i < orderedNetwork.length; i++) {
             chain.push((i + 1).toString());
@@ -1995,7 +2301,6 @@
       let html = '';
       html += `<div><strong>Порядковый номер:</strong> ${pos}</div>`;
       
-      // Определяем строку и положение в строке
       let rowIndex = -1;
       let positionInRow = -1;
       let isReversed = false;
@@ -2005,7 +2310,7 @@
         if (pos >= row.start && pos < row.start + row.count) {
           rowIndex = i;
           positionInRow = pos - row.start;
-          isReversed = i % 2 === 1; // Нечетные строки обратные
+          isReversed = i % 2 === 1;
           break;
         }
       }
@@ -2015,7 +2320,6 @@
         html += `<div><strong>Позиция в строке:</strong> ${positionInRow + 1}</div>`;
       }
       
-      // Определяем тип элемента
       if (pos === 0) {
         html += `<div><strong>Тип:</strong> Старт (начальная позиция мыши)</div>`;
       } else if (pos === finishPos) {
@@ -2024,10 +2328,9 @@
         html += `<div><strong>Тип:</strong> Мешок</div>`;
       } else if (networks[pos] === ELEMENT_TYPES.PATH) {
         html += `<div><strong>Тип:</strong> Тропинка (можно перемещаться)</div>`;
-      } else if (networks[pos] < 180) { // Это нора
+      } else if (networks[pos] < 180) {
         html += `<div><strong>Тип:</strong> Нора (телепортирует мышь)</div>`;
         
-        // Показываем связку для норы
         const holeInfo = updateHoleInfo(pos);
         if (holeInfo) {
           html += `<div style="margin: 10px 0; padding: 10px; background: #222; border-radius: 6px;">`;
@@ -2035,7 +2338,6 @@
           html += `</div>`;
         }
         
-        // Находим сеть, к которой принадлежит нора
         let foundNetwork = null;
         let holeIndex = -1;
         
@@ -2049,11 +2351,10 @@
           }
         }
         
-        // Проверяем текущую создаваемую сеть
         if (foundNetwork === null && currentMode === 'hole') {
           const index = holeNetwork.indexOf(pos);
           if (index !== -1) {
-            foundNetwork = holeNetworks.length; // Предполагаемый индекс для новой сети
+            foundNetwork = holeNetworks.length;
             holeIndex = index;
           }
         }
@@ -2064,7 +2365,6 @@
           html += `<div><strong>Номер в сети:</strong> ${holeIndex + 1}</div>`;
           html += `<div><strong>Цвет сети:</strong> <span style="color:${color}">${color}</span></div>`;
           
-          // Показываем связь
           if (foundNetwork < holeNetworks.length) {
             const network = holeNetworks[foundNetwork];
             const nextIndex = (holeIndex + 1) % network.length;
@@ -2076,7 +2376,6 @@
         html += `<div><strong>Тип:</strong> Пусто (обычная клетка, по ней нельзя ходить)</div>`;
       }
       
-      // Показываем значение в массиве networks
       html += `<div><strong>Значение в массиве:</strong> networks[${pos}] = ${networks[pos]}</div>`;
       
       infoDetails.innerHTML = html;
@@ -2087,19 +2386,16 @@
       const levelNum = document.getElementById('levelNum').value;
       const levelName = document.getElementById('levelName').value;
       
-      // Проверка обязательных полей
       if (!levelNum) {
         return '// Ошибка: Укажите номер уровня';
       }
 
-      // Формируем код уровня
       let code = `else if (level == ${levelNum}) {  // ${levelName}\n`;
       code += `    L_FINISH = ${finishPos};\n`;
       code += `    networks[0] = 181;\n`;
       code += `    networks[${finishPos}] = 182;\n`;
       code += `    currPos = 0;\n\n`;
 
-      // Сети нор
       if (holeNetworks.length > 0) {
         code += `    // Сети нор\n`;
         
@@ -2114,7 +2410,6 @@
         });
       }
 
-      // Мешки
       const bags = [];
       for (let i = 1; i < NUM_LEDS; i++) {
         if (networks[i] === ELEMENT_TYPES.BAG) {
@@ -2130,7 +2425,6 @@
         code += `\n`;
       }
 
-      // Тропинки
       const paths = [];
       let currentPath = [];
       
@@ -2197,13 +2491,10 @@
 
     // Инициализация эмулятора
     function initEmulator() {
-      // Создание ленты эмулятора
       createEmulatorStrip();
       
-      // Загрузка стандартного уровня 1
       loadStandardLevel(1);
       
-      // Обработчики событий
       emulatorLevelSelect.addEventListener('change', function() {
         if (this.value === 'custom') {
           customLevelSection.style.display = 'block';
@@ -2245,17 +2536,16 @@
         if (!led) continue;
 
         let color = '#222';
-        if (emulatorNetworks[i] === 180) color = '#222'; // Пусто
-        else if (emulatorNetworks[i] === 181) color = 'blue'; // Старт
-        else if (emulatorNetworks[i] === 182) color = 'red'; // Финиш
-        else if (emulatorNetworks[i] === 183) color = 'orange'; // Мешки
-        else if (emulatorNetworks[i] === 185) color = 'yellow'; // Тропинки
-        else if (emulatorNetworks[i] < 180) color = 'green'; // Норы
+        if (emulatorNetworks[i] === 180) color = '#222';
+        else if (emulatorNetworks[i] === 181) color = 'blue';
+        else if (emulatorNetworks[i] === 182) color = 'red';
+        else if (emulatorNetworks[i] === 183) color = 'orange';
+        else if (emulatorNetworks[i] === 185) color = 'yellow';
+        else if (emulatorNetworks[i] < 180) color = 'green';
 
         led.style.backgroundColor = color;
       }
 
-      // Отображение текущей позиции
       const currLed = document.getElementById(`emulator-led-${emulatorCurrPos}`);
       if (currLed) {
         currLed.style.backgroundColor = 'white';
@@ -2346,31 +2636,26 @@
       }
       
       try {
-        // Парсинг кода уровня
         const levelData = parseLevelCode(code);
         
-        // Заполняем данные эмулятора
         emulatorNetworks.fill(180);
         emulatorNetworks[0] = 181;
         emulatorNetworks[levelData.L_FINISH] = 182;
         emulatorL_FINISH = levelData.L_FINISH;
         emulatorCurrPos = 0;
         
-        // Устанавливаем сети нор
         for (const [from, to] of levelData.holeConnections) {
           if (from >= 0 && from < NUM_LEDS && to >= 0 && to < NUM_LEDS) {
             emulatorNetworks[from] = to;
           }
         }
         
-        // Устанавливаем мешки
         levelData.bags.forEach(bag => {
           if (bag >= 0 && bag < NUM_LEDS) {
             emulatorNetworks[bag] = 183;
           }
         });
         
-        // Устанавливаем тропинки
         levelData.paths.forEach(path => {
           for (let i = path.start; i <= path.end; i++) {
             if (i >= 0 && i < NUM_LEDS) {
@@ -2400,38 +2685,32 @@
         paths: []
       };
 
-      // Извлекаем номер уровня
       const levelMatch = code.match(/else\s+if\s+\(level\s*==\s*(\d+)\)/);
       if (levelMatch) {
         result.levelNumber = parseInt(levelMatch[1]);
       }
 
-      // Извлекаем L_FINISH
       const finishMatch = code.match(/L_FINISH\s*=\s*(\d+);/);
       if (finishMatch) {
         result.L_FINISH = parseInt(finishMatch[1]);
       }
 
-      // Извлекаем все соединения сетей нор
       const holeMatches = code.matchAll(/networks\[(\d+)\]\s*=\s*(\d+)\s*;/g);
       for (const match of holeMatches) {
         const from = parseInt(match[1]);
         const to = parseInt(match[2]);
         
-        // Исключаем старт и финиш
         if (from !== 0 && to !== 0 && from !== result.L_FINISH && to !== result.L_FINISH) {
           result.holeConnections.set(from, to);
         }
       }
 
-      // Извлекаем мешки
       const bagMatches = code.matchAll(/networks\[(\d+)\]\s*=\s*183\s*;/g);
       for (const match of bagMatches) {
         const pos = parseInt(match[1]);
         result.bags.push(pos);
       }
 
-      // Извлекаем тропинки (диапазоны)
       const pathRangeMatches = code.matchAll(/for\s*\(int\s*i\s*=\s*(\d+)\s*;\s*i\s*<=\s*(\d+)\s*;\s*i\+\+\)\s*networks\[i\]\s*=\s*185\s*;/g);
       for (const match of pathRangeMatches) {
         const start = parseInt(match[1]);
@@ -2439,7 +2718,6 @@
         result.paths.push({ start, end });
       }
 
-      // Извлекаем отдельные тропинки
       const pathSingleMatches = code.matchAll(/networks\[(\d+)\]\s*=\s*185\s*;/g);
       for (const match of pathSingleMatches) {
         const pos = parseInt(match[1]);
@@ -2449,7 +2727,7 @@
       return result;
     }
 
-    // Улучшенный алгоритм поиска пути (с учетом всех правил)
+    // Улучшенный алгоритм поиска пути
     function findSolution(start, target, networksArray) {
       const queue = [{pos: start, path: [], visited: new Set([start])}];
       const maxIterations = 20000;
@@ -2459,24 +2737,18 @@
         iterations++;
         const {pos, path, visited} = queue.shift();
         
-        // Если достигли финиша - возвращаем путь
         if (pos === target) {
           return path;
         }
         
-        // Генерируем возможные ходы с учетом всех правил
         const moves = [];
         
-        // 1. Проверяем, можно ли перемещаться влево/вправо
         const rowLen = (pos < 152) ? 38 : 28;
         const rowStart = pos - (pos % rowLen);
         
-        // Влево
         const leftPos = pos - 1;
         if (leftPos >= rowStart) {
           const leftVal = networksArray[leftPos];
-          // Можно ходить только по тропинкам, норам и финишу
-          // Нельзя ходить по пустым клеткам и мешкам
           if (leftVal === 185 || leftVal < 180 || leftVal === 182) {
             moves.push({
               pos: leftPos,
@@ -2486,13 +2758,10 @@
           }
         }
         
-        // Вправо
         const rightPos = pos + 1;
         const rowEnd = rowStart + rowLen;
         if (rightPos < rowEnd) {
           const rightVal = networksArray[rightPos];
-          // Можно ходить только по тропинкам, норам и финишу
-          // Нельзя ходить по пустым клеткам и мешкам
           if (rightVal === 185 || rightVal < 180 || rightVal === 182) {
             moves.push({
               pos: rightPos,
@@ -2502,7 +2771,6 @@
           }
         }
         
-        // 2. Проверяем, можно ли занырнуть в нору
         if (networksArray[pos] < 180) {
           const holePos = networksArray[pos];
           moves.push({
@@ -2512,7 +2780,6 @@
           });
         }
         
-        // Добавляем ходы в очередь
         for (const move of moves) {
           if (!visited.has(move.pos)) {
             queue.push({
@@ -2527,7 +2794,7 @@
       return null;
     }
 
-    // Движение влево в эмуляторе (ИСПРАВЛЕНО: можно наступать на финиш)
+    // Движение влево в эмуляторе
     function moveEmulatorLeft() {
       if (emulatorGameWon) return;
       
@@ -2537,7 +2804,6 @@
       
       if (nextPos < start) return;
       
-      // Проверяем, можно ли переместиться (можно на тропинки, норы и финиш)
       const nextValue = emulatorNetworks[nextPos];
       if (nextValue === 185 || nextValue < 180 || nextValue === 182) {
         emulatorCurrPos = nextPos;
@@ -2547,7 +2813,7 @@
       updateEmulatorDisplay();
     }
 
-    // Движение вправо в эмуляторе (ИСПРАВЛЕНО: можно наступать на финиш)
+    // Движение вправо в эмуляторе
     function moveEmulatorRight() {
       if (emulatorGameWon) return;
       
@@ -2558,7 +2824,6 @@
       
       if (nextPos >= end) return;
       
-      // Проверяем, можно ли переместиться (можно на тропинки, норы и финиш)
       const nextValue = emulatorNetworks[nextPos];
       if (nextValue === 185 || nextValue < 180 || nextValue === 182) {
         emulatorCurrPos = nextPos;
@@ -2581,7 +2846,7 @@
       updateEmulatorDisplay();
     }
 
-    // Проверка победы в эмуляторе (ДОБАВЛЕНА: проверка достижения финиша)
+    // Проверка победы в эмуляторе
     function checkEmulatorWin() {
       if (emulatorCurrPos === emulatorL_FINISH) {
         emulatorGameWon = true;
@@ -2615,7 +2880,6 @@
       
       if (!solution || solution.length === 0) {
         showNotification('Решение не найдено. Уровень может быть непроходимым.');
-        // Открываем спойлер и показываем сообщение
         document.getElementById('emulatorSpoiler').classList.add('open');
         emulatorSolutionSteps.innerHTML = '<div style="color: #ff5555; text-align: center; padding: 20px;">Решение не найдено. Уровень может быть непроходимым или алгоритм не смог найти путь.</div>';
         return;
@@ -2623,7 +2887,6 @@
       
       emulatorSolutionSteps.innerHTML = '';
       
-      // Добавляем шаги решения
       solution.forEach((step, index) => {
         const stepEl = document.createElement('div');
         stepEl.className = 'solution-step';
@@ -2631,16 +2894,13 @@
         emulatorSolutionSteps.appendChild(stepEl);
       });
       
-      // Добавляем финальное сообщение о победе
       const finalStep = document.createElement('div');
       finalStep.className = 'solution-step';
       finalStep.innerHTML = `<span class="step-number">${solution.length + 1}</span> 🎉 Уровень пройден!`;
       emulatorSolutionSteps.appendChild(finalStep);
       
-      // Открываем спойлер
       document.getElementById('emulatorSpoiler').classList.add('open');
       
-      // Прокручиваем к решению
       document.getElementById('emulatorSpoiler').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -2657,6 +2917,7 @@
     const generatorCopyBtn = document.getElementById('generatorCopyBtn');
     const generatorLoadBtn = document.getElementById('generatorLoadBtn');
     const generatorLoadEmulatorBtn = document.getElementById('generatorLoadEmulatorBtn');
+    const generatorExportToDeviceBtn = document.getElementById('generatorExportToDeviceBtn');
     const generatorCodeOutput = document.getElementById('generatorCodeOutput');
     const generatorSolutionSteps = document.getElementById('generatorSolutionSteps');
 
@@ -2665,14 +2926,13 @@
 
     // Инициализация генератора
     function initGenerator() {
-      // Создание ленты генератора
       createGeneratorStrip();
       
-      // Обработчики кнопок
       generateBtn.addEventListener('click', generateLevel);
       generatorCopyBtn.addEventListener('click', copyGeneratedCode);
       generatorLoadBtn.addEventListener('click', loadGeneratedToEditor);
       generatorLoadEmulatorBtn.addEventListener('click', loadGeneratedToEmulator);
+      generatorExportToDeviceBtn.addEventListener('click', exportGeneratedToDevice);
     }
 
     // Инициализация ползунков генератора
@@ -2693,7 +2953,6 @@
             value.textContent = this.value;
           });
           
-          // Устанавливаем начальное значение
           value.textContent = slider.value;
         }
       });
@@ -2725,12 +2984,12 @@
         if (!led) continue;
 
         let color = '#222';
-        if (generatedLevelData.networks[i] === 180) color = '#222'; // Пусто
-        else if (generatedLevelData.networks[i] === 181) color = 'blue'; // Старт
-        else if (generatedLevelData.networks[i] === 182) color = 'red'; // Финиш
-        else if (generatedLevelData.networks[i] === 183) color = 'orange'; // Мешки
-        else if (generatedLevelData.networks[i] === 185) color = 'yellow'; // Тропинки
-        else if (generatedLevelData.networks[i] < 180) color = 'green'; // Норы
+        if (generatedLevelData.networks[i] === 180) color = '#222';
+        else if (generatedLevelData.networks[i] === 181) color = 'blue';
+        else if (generatedLevelData.networks[i] === 182) color = 'red';
+        else if (generatedLevelData.networks[i] === 183) color = 'orange';
+        else if (generatedLevelData.networks[i] === 185) color = 'yellow';
+        else if (generatedLevelData.networks[i] < 180) color = 'green';
 
         led.style.backgroundColor = color;
       }
@@ -2748,16 +3007,12 @@
       
       generatorStatus.textContent = 'Генерация уровня...';
       
-      // Имитация загрузки
       setTimeout(() => {
         try {
-          // Генерация уровня
-          const level = generateLevelInternal(levelNum, levelName);
+          const level = generateGuaranteedPassableLevel(levelNum, levelName);
           
-          // Сохранение данных
           generatedLevelData = level;
           
-          // Отображение результата
           generatorCodeOutput.textContent = level.code;
           displayGeneratorSolution(level.solution);
           updateGeneratorDisplay();
@@ -2769,15 +3024,339 @@
         }
       }, 500);
     }
-
-    // Вспомогательная функция для проверки альтернативного пути
-    function checkAlternativePath(blockedPos, usedPositions, networks) {
-      // Упрощенная проверка - если клетка рядом с уже использованной, то альтернатива есть
-      const neighbors = [blockedPos - 1, blockedPos + 1, blockedPos - 38, blockedPos + 38];
-      return neighbors.some(pos => pos >= 0 && pos < NUM_LEDS && usedPositions.has(pos));
+        // Генерация гарантированно проходимого уровня
+// Генерация гарантированно проходимого уровня (новый алгоритм)
+function generateGuaranteedPassableLevel(levelNum, levelName) {
+  console.log("Генерация уровня с новым алгоритмом...");
+  
+  const params = {
+    numPaths: parseInt(document.getElementById('pathCountSlider').value),
+    numBags: parseInt(document.getElementById('bagCountSlider').value),
+    holesPerNetwork: parseInt(document.getElementById('holePerNetworkSlider').value),
+    numNetworks: parseInt(document.getElementById('networkCountSlider').value)
+  };
+  
+  console.log("Параметры генерации:", params);
+  
+  // Увеличим количество попыток
+  let attempts = 0;
+  const maxAttempts = 50;
+  
+  while (attempts < maxAttempts) {
+    attempts++;
+    console.log(`Попытка ${attempts}...`);
+    
+    try {
+      const networks = new Array(NUM_LEDS).fill(ELEMENT_TYPES.EMPTY);
+      const usedPositions = new Set([0, 179]); // Старт и финиш уже заняты
+      const holeNetworks = [];
+      
+      // Устанавливаем старт и финиш
+      networks[0] = ELEMENT_TYPES.START;
+      networks[179] = ELEMENT_TYPES.FINISH;
+      
+      // 1. СОЗДАЕМ ПРОСТОЙ ПУТЬ ОТ СТАРТА К ФИНИШУ
+      console.log("Создаем основной путь...");
+      const mainPath = createSimplePath(0, 179, networks, usedPositions);
+      
+      if (!mainPath) {
+        console.log("Не удалось создать основной путь, пробуем снова...");
+        continue;
+      }
+      
+      // 2. СОЗДАЕМ СЕТИ НОР НА РАЗНЫХ СТРОКАХ
+      console.log("Создаем сети нор...");
+      for (let n = 0; n < params.numNetworks; n++) {
+        const network = createHoleNetwork(params.holesPerNetwork, networks, usedPositions, mainPath);
+        if (network && network.length >= 2) {
+          holeNetworks.push(network);
+          
+          // Создаем циклические связи в сети
+          for (let i = 0; i < network.length; i++) {
+            const current = network[i];
+            const next = network[(i + 1) % network.length];
+            networks[current] = next;
+          }
+        }
+      }
+      
+      // 3. ДОБАВЛЯЕМ МЕШКИ (НЕ НА ПУТИ И НЕ В НОРАХ)
+      console.log("Добавляем мешки...");
+      for (let i = 0; i < params.numBags; i++) {
+        let bagPos;
+        let attemptsBag = 0;
+        do {
+          bagPos = Math.floor(Math.random() * NUM_LEDS);
+          attemptsBag++;
+        } while ((usedPositions.has(bagPos) || networks[bagPos] < 180) && attemptsBag < 100);
+        
+        if (bagPos && !usedPositions.has(bagPos)) {
+          networks[bagPos] = ELEMENT_TYPES.BAG;
+          usedPositions.add(bagPos);
+        }
+      }
+      
+      // 4. ДОБАВЛЯЕМ ДОПОЛНИТЕЛЬНЫЕ ТРОПИНКИ
+      console.log("Добавляем дополнительные тропинки...");
+      for (let p = 0; p < params.numPaths; p++) {
+        addRandomPath(networks, usedPositions);
+      }
+      
+      // 5. ПРОВЕРЯЕМ ПРОХОДИМОСТЬ
+      console.log("Проверяем проходимость...");
+      const solution = findSolutionWithRules(0, 179, networks);
+      
+      if (solution && solution.length > 0) {
+        console.log("Уровень проходим! Решение найдено.");
+        
+        // Генерируем код
+        const code = generateLevelCodeFromNetworks(levelNum, levelName, networks, 179);
+        
+        return {
+          networks: networks,
+          code: code,
+          solution: solution,
+          L_FINISH: 179,
+          holeNetworks: holeNetworks
+        };
+      } else {
+        console.log("Уровень непроходим, пробуем снова...");
+      }
+    } catch (error) {
+      console.error("Ошибка генерации:", error);
     }
+  }
+  
+  throw new Error(`Не удалось сгенерировать проходимый уровень после ${maxAttempts} попыток`);
+}
 
-    // Функция для генерации кода из сетей
+// Создание простого пути от start до finish
+function createSimplePath(start, finish, networks, usedPositions) {
+  const path = [start];
+  let current = start;
+  
+  while (current !== finish) {
+    // Определяем текущую строку
+    const row = getRow(current);
+    const rowStart = ROWS[row].start;
+    const rowEnd = rowStart + ROWS[row].count - 1;
+    
+    // Определяем направление к финишу
+    const targetDirection = finish > current ? 1 : -1;
+    
+    // Пробуем двигаться в направлении финиша
+    let nextPos = current + targetDirection;
+    
+    // Проверяем, что не вышли за пределы строки
+    if (nextPos < rowStart || nextPos > rowEnd) {
+      // Нужно перейти на другую строку
+      if (row < 4 && targetDirection > 0) {
+        // Переход на следующую строку
+        nextPos = ROWS[row + 1].start;
+      } else if (row > 0 && targetDirection < 0) {
+        // Переход на предыдущую строку
+        nextPos = ROWS[row - 1].start + (ROWS[row - 1].count - 1);
+      } else {
+        // Не можем двигаться дальше
+        return null;
+      }
+    }
+    
+    // Проверяем, что клетка свободна
+    if (usedPositions.has(nextPos)) {
+      // Клетка занята, пробуем обойти
+      let alternativePos;
+      if (Math.random() > 0.5) {
+        alternativePos = current + 1;
+        if (alternativePos > rowEnd) alternativePos = current - 1;
+      } else {
+        alternativePos = current - 1;
+        if (alternativePos < rowStart) alternativePos = current + 1;
+      }
+      
+      if (alternativePos >= rowStart && alternativePos <= rowEnd && !usedPositions.has(alternativePos)) {
+        nextPos = alternativePos;
+      } else {
+        return null;
+      }
+    }
+    
+    // Добавляем клетку в путь
+    path.push(nextPos);
+    networks[nextPos] = ELEMENT_TYPES.PATH;
+    usedPositions.add(nextPos);
+    current = nextPos;
+    
+    // Защита от бесконечного цикла
+    if (path.length > 100) return null;
+  }
+  
+  return path;
+}
+
+// Создание сети нор
+function createHoleNetwork(size, networks, usedPositions, mainPath) {
+  const network = [];
+  
+  // Первая нора должна быть на основном пути (но не на старте/финише)
+  const availablePathPositions = mainPath.filter(pos => 
+    pos !== 0 && pos !== 179 && 
+    !usedPositions.has(pos) && 
+    networks[pos] === ELEMENT_TYPES.PATH
+  );
+  
+  if (availablePathPositions.length === 0) return null;
+  
+  const firstHole = availablePathPositions[Math.floor(Math.random() * availablePathPositions.length)];
+  network.push(firstHole);
+  usedPositions.add(firstHole);
+  
+  // Остальные норы в случайных местах (на разных строках)
+  for (let i = 1; i < size; i++) {
+    let holePos;
+    let attempts = 0;
+    
+    // Выбираем случайную строку для норы
+    const targetRow = Math.floor(Math.random() * 5);
+    const rowStart = ROWS[targetRow].start;
+    const rowEnd = rowStart + ROWS[targetRow].count - 1;
+    
+    do {
+      holePos = rowStart + Math.floor(Math.random() * (rowEnd - rowStart + 1));
+      attempts++;
+    } while ((usedPositions.has(holePos) || holePos === 0 || holePos === 179) && attempts < 50);
+    
+    if (holePos && !usedPositions.has(holePos)) {
+      network.push(holePos);
+      usedPositions.add(holePos);
+    }
+  }
+  
+  return network.length >= 2 ? network : null;
+}
+
+// Добавление случайной тропинки
+function addRandomPath(networks, usedPositions) {
+  // Выбираем случайную строку
+  const row = Math.floor(Math.random() * 5);
+  const rowStart = ROWS[row].start;
+  const rowCount = ROWS[row].count;
+  
+  // Длина тропинки 1-3 клетки
+  const length = 1 + Math.floor(Math.random() * 3);
+  
+  // Находим подходящее место для тропинки
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const startInRow = Math.floor(Math.random() * (rowCount - length));
+    const startPos = rowStart + startInRow;
+    
+    // Проверяем, что все клетки свободны
+    let canPlace = true;
+    for (let i = 0; i < length; i++) {
+      const pos = startPos + i;
+      if (usedPositions.has(pos) || networks[pos] < 180) {
+        canPlace = false;
+        break;
+      }
+    }
+    
+    if (canPlace) {
+      // Размещаем тропинку
+      for (let i = 0; i < length; i++) {
+        const pos = startPos + i;
+        networks[pos] = ELEMENT_TYPES.PATH;
+        usedPositions.add(pos);
+      }
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+// Поиск решения с учетом правил игры
+function findSolutionWithRules(start, target, networksArray) {
+  const queue = [{pos: start, path: [], visited: new Set([start]), steps: 0}];
+  const maxSteps = 100; // Максимальное количество шагов
+  
+  while (queue.length > 0) {
+    const {pos, path, visited, steps} = queue.shift();
+    
+    if (steps > maxSteps) continue;
+    
+    // Если достигли финиша
+    if (pos === target) {
+      return path;
+    }
+    
+    // Генерируем возможные ходы
+    const moves = [];
+    
+    // 1. Движение влево/вправо по тропинкам или норам
+    const rowLen = (pos < 152) ? 38 : 28;
+    const rowStart = pos - (pos % rowLen);
+    const rowEnd = rowStart + rowLen - 1;
+    
+    // Влево (если есть тропинка или нора слева)
+    const leftPos = pos - 1;
+    if (leftPos >= rowStart) {
+      const leftVal = networksArray[leftPos];
+      if (leftVal === ELEMENT_TYPES.PATH || 
+          (leftVal < 180 && leftVal >= 0) || 
+          leftVal === ELEMENT_TYPES.FINISH) {
+        moves.push({
+          pos: leftPos,
+          action: 'Влево',
+          visited: new Set([...visited, leftPos]),
+          steps: steps + 1
+        });
+      }
+    }
+    
+    // Вправо
+    const rightPos = pos + 1;
+    if (rightPos <= rowEnd) {
+      const rightVal = networksArray[rightPos];
+      if (rightVal === ELEMENT_TYPES.PATH || 
+          (rightVal < 180 && rightVal >= 0) || 
+          rightVal === ELEMENT_TYPES.FINISH) {
+        moves.push({
+          pos: rightPos,
+          action: 'Вправо',
+          visited: new Set([...visited, rightPos]),
+          steps: steps + 1
+        });
+      }
+    }
+    
+    // 2. Занырнуть в нору (если стоим на норе)
+    if (networksArray[pos] < 180 && networksArray[pos] >= 0) {
+      const holePos = networksArray[pos];
+      moves.push({
+        pos: holePos,
+        action: 'Занырнуть',
+        visited: new Set([...visited, holePos]),
+        steps: steps + 1
+      });
+    }
+    
+    // Добавляем ходы в очередь (если не посещали эту позицию в текущем пути)
+    for (const move of moves) {
+      if (!visited.has(move.pos)) {
+        queue.push({
+          pos: move.pos,
+          path: [...path, move.action],
+          visited: move.visited,
+          steps: move.steps
+        });
+      }
+    }
+  }
+  
+  return null;
+}
+
+    // Генерация кода из сетей
     function generateLevelCodeFromNetworks(levelNum, levelName, networks, finishPos) {
       let code = `else if (level == ${levelNum}) {  // ${levelName}\n`;
       code += `    L_FINISH = ${finishPos};\n`;
@@ -2785,7 +3364,6 @@
       code += `    networks[${finishPos}] = 182;\n`;
       code += `    currPos = 0;\n\n`;
       
-      // Сети нор
       const holeConnections = new Map();
       for (let i = 0; i < NUM_LEDS; i++) {
         if (networks[i] < 180 && networks[i] >= 0 && networks[i] !== i) {
@@ -2795,7 +3373,6 @@
       
       if (holeConnections.size > 0) {
         code += `    // Сети нор\n`;
-        // Группируем по сетям
         const visited = new Set();
         let networkIndex = 1;
         
@@ -2824,7 +3401,6 @@
         }
       }
       
-      // Мешки
       const bags = [];
       for (let i = 1; i < NUM_LEDS; i++) {
         if (networks[i] === 183) {
@@ -2840,7 +3416,6 @@
         code += `\n`;
       }
       
-      // Тропинки
       const paths = [];
       let currentPath = [];
       
@@ -2878,288 +3453,28 @@
       return code;
     }
 
-    // Внутренняя функция генерации уровня
-    function generateLevelInternal(levelNum, levelName) {
-      console.log("Генерация гарантированно проходимого уровня...");
-      
-      // Параметры из ползунков
-      const params = {
-        numPaths: parseInt(document.getElementById('pathCountSlider').value),
-        numBags: parseInt(document.getElementById('bagCountSlider').value),
-        holesPerNetwork: parseInt(document.getElementById('holePerNetworkSlider').value),
-        numNetworks: parseInt(document.getElementById('networkCountSlider').value)
-      };
-      
-      console.log("Параметры генерации:", params);
-      
-      const networks = new Array(NUM_LEDS).fill(180);
-      const usedPositions = new Set();
-      const solutionPath = [];
-      
-      // Устанавливаем старт и финиш
-      networks[0] = 181;
-      networks[179] = 182;
-      usedPositions.add(0);
-      usedPositions.add(179);
-      
-      // 1. СОЗДАЕМ ГАРАНТИРОВАННО ПРОХОДИМЫЙ ПУТЬ ОТ СТАРТА К ФИНИШУ
-      console.log("Создаем основной путь от старта к финишу...");
-      
-      let currentPos = 0;
-      const targetPos = 179;
-      let stepCount = 0;
-      const maxSteps = 30;
-      
-      // Пока не достигли финиша или не превысили лимит шагов
-      while (currentPos !== targetPos && stepCount < maxSteps) {
-        stepCount++;
-        
-        // Определяем текущую строку
-        const row = getRow(currentPos);
-        const rowStart = ROWS[row].start;
-        const rowEnd = rowStart + ROWS[row].count - 1;
-        const direction = (row % 2 === 0) ? 1 : -1; // Направление строки
-        
-        // Выбираем следующий шаг
-        let nextPos = currentPos;
-        
-        // Определяем, в каком направлении финиш
-        const targetDirection = (targetPos > currentPos) ? 1 : -1;
-        
-        // Пытаемся двигаться к финишу (70% времени)
-        if (Math.random() > 0.3) {
-          // Движение вправо/влево
-          const candidatePos = currentPos + targetDirection;
-          if (candidatePos >= rowStart && candidatePos <= rowEnd && 
-              candidatePos >= 0 && candidatePos < NUM_LEDS &&
-              !usedPositions.has(candidatePos)) {
-            nextPos = candidatePos;
-            solutionPath.push(`Шаг ${stepCount}: Движение ${targetDirection > 0 ? 'вправо' : 'влево'} к ${nextPos}`);
-          }
-        }
-        
-        // Если не удалось двигаться к цели, пробуем другие варианты
-        if (nextPos === currentPos) {
-          // Пробуем в случайном направлении
-          const randomDirection = Math.random() > 0.5 ? 1 : -1;
-          const candidatePos = currentPos + randomDirection;
-          
-          if (candidatePos >= rowStart && candidatePos <= rowEnd && 
-              candidatePos >= 0 && candidatePos < NUM_LEDS &&
-              !usedPositions.has(candidatePos)) {
-            nextPos = candidatePos;
-            solutionPath.push(`Шаг ${stepCount}: Движение ${randomDirection > 0 ? 'вправо' : 'влево'} к ${nextPos}`);
-          } else {
-            // Если и это не удалось, попробуем перейти на другую строку через нору
-            break;
-          }
-        }
-        
-        // Помечаем клетку как использованную
-        if (nextPos !== currentPos) {
-          // Создаем тропинку или нору на этом пути
-          if (Math.random() > 0.7 && stepCount > 3) { // 30% шанс создать нору
-            // Создаем простую сеть из 2-3 нор
-            const networkSize = 2 + Math.floor(Math.random() * 2); // 2-3 норы
-            const network = [nextPos];
-            
-            // Добавляем дополнительные норы в сети
-            for (let i = 1; i < networkSize; i++) {
-              let holePos;
-              let attempts = 0;
-              do {
-                holePos = Math.floor(Math.random() * (NUM_LEDS - 10)) + 5;
-                attempts++;
-              } while ((usedPositions.has(holePos) || 
-                       Math.abs(holePos - targetPos) < 10) && attempts < 20);
-              
-              if (holePos && !usedPositions.has(holePos)) {
-                network.push(holePos);
-                usedPositions.add(holePos);
-              }
-            }
-            
-            // Создаем циклическую сеть
-            for (let i = 0; i < network.length; i++) {
-              const current = network[i];
-              const next = network[(i + 1) % network.length];
-              networks[current] = next;
-            }
-            
-            solutionPath.push(`Шаг ${stepCount}: Нора в ${nextPos} ведет в сеть [${network.join(', ')}]`);
-          } else {
-            // Создаем тропинку
-            networks[nextPos] = 185;
-            solutionPath.push(`Шаг ${stepCount}: Тропинка на ${nextPos}`);
-          }
-          
-          usedPositions.add(nextPos);
-          currentPos = nextPos;
-        }
-      }
-      
-      // 2. СОЗДАЕМ СЕТИ НОР С БОЛЬШИМ КОЛИЧЕСТВОМ ПЕРЕХОДОВ (для запутывания)
-      console.log("Создаем дополнительные сети для запутывания...");
-      const additionalNetworks = [];
-      
-      for (let n = 0; n < params.numNetworks; n++) {
-        const networkSize = params.holesPerNetwork;
-        const network = [];
-        
-        // Создаем сеть нор в разных частях поля
-        for (let i = 0; i < networkSize; i++) {
-          let holePos;
-          let attempts = 0;
-          do {
-            // Выбираем позиции подальше от основного пути и финиша
-            const section = Math.floor(Math.random() * 5);
-            holePos = Math.floor(Math.random() * 36) + (section * 36);
-            attempts++;
-          } while ((usedPositions.has(holePos) || 
-                   holePos === 0 || holePos === 179 ||
-                   Math.abs(holePos - targetPos) < 15) && attempts < 30);
-          
-          if (holePos && !usedPositions.has(holePos) && holePos < NUM_LEDS) {
-            network.push(holePos);
-            usedPositions.add(holePos);
-          }
-        }
-        
-        if (network.length >= 2) {
-          additionalNetworks.push(network);
-          
-          // Создаем циклические связи
-          for (let i = 0; i < network.length; i++) {
-            const current = network[i];
-            const next = network[(i + 1) % network.length];
-            networks[current] = next;
-          }
-        }
-      }
-      
-      // 3. РАЗМЕЩАЕМ МЕШКИ В ТРУДНОДОСТУПНЫХ МЕСТАХ
-      console.log("Размещаем мешки...");
-      const bagPositions = [];
-      
-      for (let i = 0; i < params.numBags; i++) {
-        let bagPos;
-        let attempts = 0;
-        
-        do {
-          // Мешки ставим в середине длинных пустых участков
-          bagPos = Math.floor(Math.random() * 170) + 5;
-          attempts++;
-          
-          // Проверяем, что мешок не блокирует единственный путь
-          const hasAlternative = checkAlternativePath(bagPos, usedPositions, networks);
-          
-        } while ((usedPositions.has(bagPos) || 
-                 bagPos === 0 || bagPos === 179 ||
-                 !hasAlternative) && attempts < 50);
-        
-        if (bagPos && !usedPositions.has(bagPos) && bagPos < NUM_LEDS) {
-          networks[bagPos] = 183;
-          usedPositions.add(bagPos);
-          bagPositions.push(bagPos);
-        }
-      }
-      
-      // 4. ДОБАВЛЯЕМ ТРОПИНКИ ДЛЯ СОЕДИНЕНИЯ ОБЛАСТЕЙ
-      console.log("Добавляем соединительные тропинки...");
-      
-      // Создаем несколько тропинок, соединяющих разные части уровня
-      for (let p = 0; p < params.numPaths; p++) {
-        const pathLength = 3 + Math.floor(Math.random() * 4); // 3-6 клеток
-        let pathStart;
-        let attempts = 0;
-        
-        do {
-          // Начинаем тропинку от существующего элемента
-          pathStart = Array.from(usedPositions)[Math.floor(Math.random() * usedPositions.size)];
-          attempts++;
-        } while ((!pathStart || pathStart > NUM_LEDS - pathLength) && attempts < 30);
-        
-        if (pathStart) {
-          // Создаем тропинку
-          for (let i = 0; i < pathLength && (pathStart + i) < NUM_LEDS; i++) {
-            const pos = pathStart + i;
-            if (!usedPositions.has(pos) && networks[pos] === 180) {
-              networks[pos] = 185;
-              usedPositions.add(pos);
-            }
-          }
-        }
-      }
-      
-      // 5. ГАРАНТИРУЕМ, ЧТО ПЕРЕД ФИНИШЕМ ЕСТЬ НОРА ИЗ "ДАЛЕКОЙ" СЕТИ
-      console.log("Создаем сеть нор перед финишем...");
-      
-      // Находим позицию за 3-5 шагов до финиша
-      const preFinishPositions = [];
-      for (let i = 1; i <= 5; i++) {
-        const pos = 179 - i;
-        if (pos > 0 && networks[pos] === 180) {
-          preFinishPositions.push(pos);
-        }
-      }
-      
-      if (preFinishPositions.length > 0) {
-        const preFinishPos = preFinishPositions[Math.floor(Math.random() * preFinishPositions.length)];
-        
-        // Создаем специальную сеть нор, которая начинается далеко от финиша
-        const finalNetwork = [preFinishPos];
-        
-        // Добавляем норы в начале уровня (далеко от финиша)
-        for (let i = 0; i < 2; i++) {
-          let farPos;
-          let attempts = 0;
-          do {
-            farPos = Math.floor(Math.random() * 50) + 10;
-            attempts++;
-          } while ((usedPositions.has(farPos) || 
-                   farPos === preFinishPos) && attempts < 20);
-          
-          if (farPos && !usedPositions.has(farPos)) {
-            finalNetwork.push(farPos);
-            usedPositions.add(farPos);
-          }
-        }
-        
-        // Создаем сеть
-        if (finalNetwork.length >= 2) {
-          for (let i = 0; i < finalNetwork.length; i++) {
-            const current = finalNetwork[i];
-            const next = finalNetwork[(i + 1) % finalNetwork.length];
-            networks[current] = next;
-          }
-          solutionPath.push(`Перед финишем (${preFinishPos}) - нора из сети [${finalNetwork.join(', ')}]`);
-        }
-      }
-      
-      // 6. ГЕНЕРИРУЕМ КОД УРОВНЯ
-      console.log("Генерируем код...");
-      let code = generateLevelCodeFromNetworks(levelNum, levelName, networks, 179);
-      
-      return {
-        networks: networks,
-        code: code,
-        solution: solutionPath,
-        L_FINISH: 179,
-        holeNetworks: additionalNetworks
-      };
-    }
-
     // Отображение решения генератора
-    function displayGeneratorSolution(solution) {
-      generatorSolutionSteps.innerHTML = '';
-      
-      solution.forEach((step, index) => {
-        const stepEl = document.createElement('div');
-        stepEl.className = 'solution-step';
-        stepEl.innerHTML = step;
-        generatorSolutionSteps.appendChild(stepEl);
-      });
-    }
+function displayGeneratorSolution(solution) {
+  generatorSolutionSteps.innerHTML = '';
+  
+  if (!solution || solution.length === 0) {
+    generatorSolutionSteps.innerHTML = '<div style="color: #ff5555; text-align: center; padding: 20px;">Решение не найдено. Возможно, уровень слишком сложный для алгоритма.</div>';
+    return;
+  }
+  
+  solution.forEach((step, index) => {
+    const stepEl = document.createElement('div');
+    stepEl.className = 'solution-step';
+    stepEl.innerHTML = `<span class="step-number">${index + 1}</span> ${step}`;
+    generatorSolutionSteps.appendChild(stepEl);
+  });
+  
+  // Добавляем финальное сообщение
+  const finalStep = document.createElement('div');
+  finalStep.className = 'solution-step';
+  finalStep.innerHTML = `<span class="step-number">${solution.length + 1}</span> 🎉 Уровень пройден!`;
+  generatorSolutionSteps.appendChild(finalStep);
+}
 
     // Копирование сгенерированного кода
     function copyGeneratedCode() {
@@ -3186,14 +3501,11 @@
         return;
       }
       
-      // Переключение на вкладку редактора
       document.querySelector('[data-tab="editor"]').click();
       
-      // Загрузка данных в редактор
       networks = [...generatedLevelData.networks];
       finishPos = generatedLevelData.L_FINISH;
       
-      // Восстановление сетей нор
       holeNetworks = [];
       const visited = new Set();
       for (let i = 0; i < NUM_LEDS; i++) {
@@ -3213,30 +3525,24 @@
         }
       }
       
-      // Сброс текущей создаваемой сети и режима
       holeNetwork = [];
       currentMode = 'free';
       currentQuickTool = null;
       smallTools.forEach(t => t.classList.remove('active'));
       
-      // Сброс переключателей индексов
       showAllIndices = false;
       showHoleIndices = false;
       showAllIndicesCheckbox.checked = false;
       showHoleIndicesCheckbox.checked = false;
       
-      // Обновление интерфейса редактора
       document.getElementById('levelNum').value = generatorLevelNum.value;
       document.getElementById('levelName').value = generatorLevelName.value;
       codeOutput.textContent = generatedLevelData.code;
       
-      // Сброс панели информации
       infoPanel.style.display = 'none';
       infoDetails.innerHTML = '';
       
-      // Обновление кнопок режимов
       updateToolButtons();
-      // Обновление визуализации
       updateVisuals();
       
       showNotification('Сгенерированный уровень загружен в редактор');
@@ -3249,27 +3555,593 @@
         return;
       }
       
-      // Переключение на вкладку эмулятора
       document.querySelector('[data-tab="emulator"]').click();
       
-      // Загрузка данных в эмулятор
       emulatorNetworks = [...generatedLevelData.networks];
       emulatorL_FINISH = generatedLevelData.L_FINISH;
       emulatorCurrPos = 0;
       emulatorGameWon = false;
       isEmulatorCustomLevel = true;
       
-      // Установка выбора на пользовательский уровень
       emulatorLevelSelect.value = 'custom';
       customLevelSection.style.display = 'block';
       
-      // Заполнение поля кода
       emulatorCustomCode.value = generatedLevelData.code;
       
-      // Обновление отображения
       updateEmulatorDisplay();
       emulatorStatus.textContent = 'Сгенерированный уровень загружен в эмулятор';
       showNotification('Уровень загружен в эмулятор');
+    }
+
+    // Экспорт сгенерированного уровня в менеджер
+    function exportGeneratedToDevice() {
+      if (!generatedLevelData) {
+        showNotification('Сначала сгенерируйте уровень');
+        return;
+      }
+      
+      const levelName = generatorLevelName.value;
+      const levelNum = generatorLevelNum.value;
+      
+      addLevelToManager(generatedLevelData.code, levelName, {
+        networks: [...generatedLevelData.networks],
+        finishPos: generatedLevelData.L_FINISH,
+        holeNetworks: generatedLevelData.holeNetworks || []
+      });
+      
+      document.querySelector('[data-tab="device"]').click();
+    }
+
+    // =============================================
+    // МЕНЕДЖЕР УРОВНЕЙ (УСТРОЙСТВО)
+    // =============================================
+
+    // Массив для хранения уровней в менеджере
+    let managedLevels = [];
+
+    // Инициализация менеджера устройств
+    function initDeviceManager() {
+      loadManagedLevels();
+      
+      document.getElementById('importLevelsBtn').addEventListener('click', importLevelsFile);
+      document.getElementById('exportLevelsBtn').addEventListener('click', exportLevelsFile);
+      document.getElementById('refreshLevelsBtn').addEventListener('click', function() {
+        loadManagedLevels();
+        showNotification('Список уровней обновлен');
+      });
+      document.getElementById('saveLevelsBtn').addEventListener('click', saveLevelsToFile);
+      document.getElementById('clearLevelsBtn').addEventListener('click', clearAllLevels);
+    }
+
+    // Загрузка уровней из localStorage
+    function loadManagedLevels() {
+      const saved = localStorage.getItem('mousegame_levels');
+      if (saved) {
+        managedLevels = JSON.parse(saved);
+      }
+      updateLevelsList();
+    }
+
+    // Сохранение уровней в localStorage
+    function saveManagedLevels() {
+      localStorage.setItem('mousegame_levels', JSON.stringify(managedLevels));
+    }
+
+    // Добавление уровня из редактора/генератора
+    function addLevelToManager(code, name, previewData) {
+      const levelMatch = code.match(/else\s+if\s+\(level\s*==\s*(\d+)\)/);
+      let levelNum = managedLevels.length + 1;
+      
+      if (levelMatch) {
+        levelNum = parseInt(levelMatch[1]);
+      }
+      
+      const existingIndex = managedLevels.findIndex(l => l.number === levelNum);
+      if (existingIndex !== -1) {
+        if (!confirm(`Уровень с номером ${levelNum} уже существует. Перезаписать?`)) {
+          return;
+        }
+        managedLevels[existingIndex] = {
+          number: levelNum,
+          name: name,
+          code: code,
+          preview: previewData,
+          timestamp: new Date().toISOString()
+        };
+      } else {
+        managedLevels.push({
+          number: levelNum,
+          name: name,
+          code: code,
+          preview: previewData,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      managedLevels.sort((a, b) => a.number - b.number);
+      
+      saveManagedLevels();
+      updateLevelsList();
+      showNotification(`Уровень ${levelNum} добавлен в менеджер`);
+    }
+
+    // Обновление списка уровней
+    function updateLevelsList() {
+      const container = document.getElementById('levelsList');
+      if (!container) return;
+      
+      if (managedLevels.length === 0) {
+        document.getElementById('levelsListContainer').style.display = 'none';
+        return;
+      }
+      
+      document.getElementById('levelsListContainer').style.display = 'block';
+      container.innerHTML = '';
+      
+      managedLevels.forEach(level => {
+        const levelEl = document.createElement('div');
+        levelEl.className = 'level-item';
+        levelEl.style.cssText = `
+          background: var(--input-bg); 
+          border-radius: 10px; 
+          padding: 15px; 
+          margin-bottom: 10px;
+          border-left: 4px solid var(--accent-color);
+        `;
+        
+        levelEl.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--accent-color);">Уровень ${level.number}</strong>
+              <div>${level.name}</div>
+              <div style="font-size: 12px; color: #888;">${new Date(level.timestamp).toLocaleDateString()}</div>
+            </div>
+            <div style="display: flex; gap: 5px;">
+              <button class="small-tool" onclick="editLevel(${level.number})" style="padding: 5px 10px;">✏️</button>
+              <button class="small-tool" onclick="deleteLevel(${level.number})" style="padding: 5px 10px; background: #ff4444;">🗑️</button>
+              <button class="small-tool" onclick="moveLevel(${level.number}, -1)" style="padding: 5px 10px;">⬆️</button>
+              <button class="small-tool" onclick="moveLevel(${level.number}, 1)" style="padding: 5px 10px;">⬇️</button>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(levelEl);
+      });
+      
+      updateLevelsPreview();
+    }
+
+    window.editLevel = function(levelNum) {
+  const level = managedLevels.find(l => l.number === levelNum);
+  if (level) {
+    document.querySelector('[data-tab="editor"]').click();
+    
+    // Парсим код уровня
+    const levelData = parseLevelCodeForEditor(level.code);
+    
+    if (levelData) {
+      // Заполняем данные редактора
+      networks = [...levelData.networks];
+      finishPos = levelData.L_FINISH;
+      holeNetworks = levelData.holeNetworks || [];
+      
+      // Обновляем форму
+      const levelMatch = level.code.match(/(?:if|else\s+if)\s*\(\s*level\s*==\s*(\d+)\s*\)/);
+      if (levelMatch) {
+        document.getElementById('levelNum').value = levelMatch[1];
+      }
+      
+      const nameMatch = level.code.match(/\/\/\s*(.+)/);
+      if (nameMatch) {
+        document.getElementById('levelName').value = nameMatch[1];
+      }
+      
+      // Сбрасываем текущую создаваемую сеть и режим
+      holeNetwork = [];
+      currentMode = 'free';
+      currentQuickTool = null;
+      smallTools.forEach(t => t.classList.remove('active'));
+      
+      // Обновляем отображение
+      updateToolButtons();
+      updateVisuals();
+      
+      // Генерируем и отображаем код
+      const generatedCode = generateLevelCode();
+      codeOutput.textContent = generatedCode;
+      
+      showNotification(`Уровень ${levelNum} загружен в редактор`);
+    } else {
+      showNotification('Ошибка при загрузке уровня. Проверьте формат кода.');
+    }
+  }
+};
+
+// Функция для парсинга кода уровня в данные редактора
+function parseLevelCodeForEditor(code) {
+  try {
+    const networks = new Array(NUM_LEDS).fill(ELEMENT_TYPES.EMPTY);
+    let L_FINISH = 179;
+    let holeNetworks = [];
+    
+    // Временная карта для связей нор
+    const holeConnections = new Map();
+    
+    // Извлекаем L_FINISH
+    const finishMatch = code.match(/L_FINISH\s*=\s*(\d+);/);
+    if (finishMatch) {
+      L_FINISH = parseInt(finishMatch[1]);
+    }
+    
+    // Устанавливаем старт и финиш
+    networks[0] = ELEMENT_TYPES.START;
+    networks[L_FINISH] = ELEMENT_TYPES.FINISH;
+    
+    // Разделяем код на строки для более точного парсинга
+    const lines = code.split('\n');
+    
+    for (let line of lines) {
+      line = line.trim();
+      
+      // Пропускаем пустые строки и комментарии
+      if (!line || line.startsWith('//')) continue;
+      
+      // Ищем присваивание сетей нор (цифровые значения)
+      const holeMatch = line.match(/networks\[(\d+)\]\s*=\s*(\d+)\s*;/);
+      if (holeMatch) {
+        const from = parseInt(holeMatch[1]);
+        const to = parseInt(holeMatch[2]);
+        
+        // Исключаем старт, финиш и значения > 180
+        if (from !== 0 && to !== 0 && 
+            from !== L_FINISH && to !== L_FINISH &&
+            to < 180) {
+          holeConnections.set(from, to);
+          networks[from] = to; // Устанавливаем как нору
+        }
+      }
+      
+      // Ищем мешки (значение 183)
+      const bagMatch = line.match(/networks\[(\d+)\]\s*=\s*183\s*;/);
+      if (bagMatch) {
+        const pos = parseInt(bagMatch[1]);
+        if (pos !== 0 && pos !== L_FINISH) {
+          networks[pos] = ELEMENT_TYPES.BAG;
+        }
+      }
+      
+      // Ищем отдельные тропинки (значение 185)
+      const pathSingleMatch = line.match(/networks\[(\d+)\]\s*=\s*185\s*;/);
+      if (pathSingleMatch) {
+        const pos = parseInt(pathSingleMatch[1]);
+        if (pos !== 0 && pos !== L_FINISH && networks[pos] === ELEMENT_TYPES.EMPTY) {
+          networks[pos] = ELEMENT_TYPES.PATH;
+        }
+      }
+      
+      // Ищем диапазоны тропинок
+      const pathRangeMatch = line.match(/for\s*\(\s*int\s+i\s*=\s*(\d+)\s*;\s*i\s*<=\s*(\d+)\s*;\s*i\+\+\s*\)\s*networks\[i\]\s*=\s*185\s*;/);
+      if (pathRangeMatch) {
+        const start = parseInt(pathRangeMatch[1]);
+        const end = parseInt(pathRangeMatch[2]);
+        for (let i = start; i <= end; i++) {
+          if (i !== 0 && i !== L_FINISH && networks[i] === ELEMENT_TYPES.EMPTY) {
+            networks[i] = ELEMENT_TYPES.PATH;
+          }
+        }
+      }
+    }
+    
+    // Восстанавливаем сети нор из связей
+    if (holeConnections.size > 0) {
+      const visited = new Set();
+      holeNetworks = [];
+      
+      for (let [from, to] of holeConnections) {
+        if (!visited.has(from)) {
+          const network = [];
+          let current = from;
+          
+          // Собираем цепочку связей
+          while (holeConnections.has(current) && !visited.has(current)) {
+            visited.add(current);
+            network.push(current);
+            current = holeConnections.get(current);
+          }
+          
+          // Добавляем последний элемент, если он еще не добавлен
+          if (current && !visited.has(current) && holeConnections.has(current)) {
+            visited.add(current);
+            network.push(current);
+          }
+          
+          // Добавляем сеть, если в ней больше 1 норы
+          if (network.length > 1) {
+            holeNetworks.push(network);
+          }
+        }
+      }
+    }
+    
+    return {
+      networks,
+      L_FINISH,
+      holeNetworks
+    };
+  } catch (error) {
+    console.error('Ошибка парсинга кода уровня:', error);
+    return null;
+  }
+}
+
+    window.deleteLevel = function(levelNum) {
+      if (confirm(`Удалить уровень ${levelNum}?`)) {
+        managedLevels = managedLevels.filter(l => l.number !== levelNum);
+        saveManagedLevels();
+        updateLevelsList();
+        showNotification(`Уровень ${levelNum} удален`);
+      }
+    };
+
+    window.moveLevel = function(levelNum, direction) {
+      const index = managedLevels.findIndex(l => l.number === levelNum);
+      if (index === -1) return;
+      
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= managedLevels.length) return;
+      
+      const temp = managedLevels[index];
+      managedLevels[index] = managedLevels[newIndex];
+      managedLevels[newIndex] = temp;
+      
+      saveManagedLevels();
+      updateLevelsList();
+      showNotification(`Уровень ${levelNum} перемещен`);
+    };
+
+    // Обновление превью файла levels.h
+function updateLevelsPreview() {
+  const preview = document.getElementById('levelsPreview');
+  if (!preview) return;
+  
+  if (managedLevels.length === 0) {
+    preview.textContent = "// Нет уровней для отображения";
+    return;
+  }
+  
+  let code = `#include "constants.h"\n\n`;
+  code += `void fillList(byte level) {\n`;
+  code += `  for (int i = 0; i < 180; i++) networks[i] = 180;  // Инициализация всех клеток как пустых\n\n`;
+  
+  managedLevels.forEach((level, index) => {
+    // Для первого уровня используем "if", для остальных "else if"
+    if (index === 0) {
+      let levelCode = level.code;
+      if (levelCode.startsWith('else if')) {
+        levelCode = 'if' + levelCode.substring(7);
+      }
+      code += `  ${levelCode}\n\n`;
+    } else {
+      let levelCode = level.code;
+      if (!levelCode.startsWith('else if')) {
+        if (levelCode.startsWith('if')) {
+          levelCode = 'else ' + levelCode;
+        }
+      }
+      code += `  ${levelCode}\n\n`;
+    }
+  });
+  
+  code += `}`;
+  
+  preview.textContent = code;
+}
+
+    // Импорт файла levels.h
+    function importLevelsFile() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.h,.txt';
+      
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          try {
+            const content = event.target.result;
+            parseLevelsHFile(content);
+            showNotification('Файл levels.h успешно загружен');
+          } catch (error) {
+            showNotification('Ошибка при чтении файла: ' + error.message);
+          }
+        };
+        reader.readAsText(file);
+      };
+      
+      input.click();
+    }
+
+    // Парсинг файла levels.h
+function parseLevelsHFile(content) {
+  managedLevels = [];
+  
+  // Улучшенный парсинг - обрабатываем весь файл как последовательность блоков
+  const lines = content.split('\n');
+  let inLevel = false;
+  let currentLevel = null;
+  let braceCount = 0;
+  let levelCode = '';
+  let levelStartLine = 0;
+  
+  // Удаляем лишние пробелы и объединяем строки для упрощения
+  const cleanLines = [];
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
+    
+    // Убираем пустые строки
+    if (line === '') continue;
+    
+    // Проверяем, не начинается ли новый уровень на той же строке, где закрывается предыдущий
+    if (line.includes('} else if') || line.includes('}else if')) {
+      // Разделяем закрывающую скобку и else if
+      const parts = line.split('}');
+      if (parts.length > 1) {
+        // Добавляем закрывающую скобку от предыдущего уровня
+        cleanLines.push('}');
+        // Добавляем else if как отдельную строку
+        cleanLines.push(parts[1].trim());
+      }
+    } else {
+      cleanLines.push(line);
+    }
+  }
+  
+  // Теперь парсим очищенные строки
+  for (let i = 0; i < cleanLines.length; i++) {
+    const line = cleanLines[i];
+    
+    // Находим начало уровня (if или else if)
+    const levelStartMatch = line.match(/^(if|else\s+if)\s*\(\s*level\s*==\s*(\d+)\s*\)\s*\{/);
+    if (levelStartMatch && !inLevel) {
+      if (currentLevel) {
+        // Сохраняем предыдущий уровень
+        currentLevel.code = levelCode.trim();
+        managedLevels.push(currentLevel);
+      }
+      
+      const levelNum = parseInt(levelStartMatch[2]);
+      const nameMatch = line.match(/\/\/\s*(.+)/);
+      const levelName = nameMatch ? nameMatch[1].trim() : `Уровень ${levelNum}`;
+      
+      inLevel = true;
+      levelStartLine = i;
+      braceCount = 1;
+      levelCode = line + '\n';
+      
+      currentLevel = {
+        number: levelNum,
+        name: levelName,
+        code: '',
+        preview: null,
+        timestamp: new Date().toISOString()
+      };
+    } else if (inLevel) {
+      levelCode += line + '\n';
+      
+      // Считаем фигурные скобки
+      const openBraces = (line.match(/\{/g) || []).length;
+      const closeBraces = (line.match(/\}/g) || []).length;
+      braceCount += openBraces - closeBraces;
+      
+      // Если все скобки закрыты, завершаем уровень
+      if (braceCount === 0) {
+        currentLevel.code = levelCode.trim();
+        managedLevels.push(currentLevel);
+        
+        inLevel = false;
+        currentLevel = null;
+        levelCode = '';
+      }
+    }
+  }
+  
+  // Если остался незавершенный уровень, сохраняем его
+  if (inLevel && currentLevel) {
+    currentLevel.code = levelCode.trim();
+    managedLevels.push(currentLevel);
+  }
+  
+  // Если не нашли уровней, пробуем более простой подход
+  if (managedLevels.length === 0) {
+    console.log("Пробуем альтернативный парсинг...");
+    // Ищем все блоки уровней простым регулярным выражением
+    const levelRegex = /(?:if|else\s+if)\s*\(\s*level\s*==\s*(\d+)\s*\)\s*\{[^}]*(?:\}[^}]*)*?\}/g;
+    let match;
+    
+    while ((match = levelRegex.exec(content)) !== null) {
+      const levelNum = parseInt(match[1]);
+      const fullMatch = match[0];
+      
+      // Извлекаем комментарий с названием
+      const nameMatch = fullMatch.match(/\/\/\s*(.+)/);
+      const levelName = nameMatch ? nameMatch[1].trim() : `Уровень ${levelNum}`;
+      
+      managedLevels.push({
+        number: levelNum,
+        name: levelName,
+        code: fullMatch.trim(),
+        preview: null,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+  
+  managedLevels.sort((a, b) => a.number - b.number);
+  saveManagedLevels();
+  updateLevelsList();
+  console.log("Загружено уровней:", managedLevels.length);
+}
+
+    // Экспорт в файл levels.h
+function exportLevelsFile() {
+  if (managedLevels.length === 0) {
+    showNotification('Нет уровней для экспорта');
+    return;
+  }
+  
+  let content = `#include "constants.h"\n\n`;
+  content += `void fillList(byte level) {\n`;
+  content += `  for (int i = 0; i < 180; i++) networks[i] = 180;  // Инициализация всех клеток как пустых\n\n`;
+  
+  managedLevels.forEach((level, index) => {
+    // Для первого уровня используем "if", для остальных "else if"
+    if (index === 0) {
+      // Заменяем "else if" на "if" для первого уровня
+      let code = level.code;
+      if (code.startsWith('else if')) {
+        code = 'if' + code.substring(7);
+      }
+      content += `  ${code}\n\n`;
+    } else {
+      // Убедимся, что это "else if"
+      let code = level.code;
+      if (!code.startsWith('else if')) {
+        if (code.startsWith('if')) {
+          code = 'else ' + code;
+        }
+      }
+      content += `  ${code}\n\n`;
+    }
+  });
+  
+  content += `}`;
+  
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'levels.h';
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showNotification('Файл levels.h экспортирован');
+}
+
+    // Сохранение уровней в файл
+    function saveLevelsToFile() {
+      exportLevelsFile();
+    }
+
+    // Очистка всех уровней
+    function clearAllLevels() {
+      if (confirm('Очистить все уровни? Это действие нельзя отменить.')) {
+        managedLevels = [];
+        saveManagedLevels();
+        updateLevelsList();
+        showNotification('Все уровни очищены');
+      }
     }
   </script>
 </body>
