@@ -3024,21 +3024,19 @@
         }
       }, 500);
     }
-        // Генерация гарантированно проходимого уровня
-// Генерация гарантированно проходимого уровня (новый алгоритм)
+        // Генерация уровня по новой логике с увеличенным количеством нор
 function generateGuaranteedPassableLevel(levelNum, levelName) {
-  console.log("Генерация уровня с новым алгоритмом...");
+  console.log("Генерация уровня с новой логикой (больше нор, меньше тропинок)...");
   
   const params = {
-    numPaths: parseInt(document.getElementById('pathCountSlider').value),
+    numPaths: Math.max(1, parseInt(document.getElementById('pathCountSlider').value) - 2), // Уменьшаем тропинки
     numBags: parseInt(document.getElementById('bagCountSlider').value),
-    holesPerNetwork: parseInt(document.getElementById('holePerNetworkSlider').value),
-    numNetworks: parseInt(document.getElementById('networkCountSlider').value)
+    holesPerNetwork: Math.min(8, Math.max(3, parseInt(document.getElementById('holePerNetworkSlider').value) + 2)), // Увеличиваем норы
+    numNetworks: Math.min(12, Math.max(3, parseInt(document.getElementById('networkCountSlider').value) + 2)) // Увеличиваем сети
   };
   
   console.log("Параметры генерации:", params);
   
-  // Увеличим количество попыток
   let attempts = 0;
   const maxAttempts = 50;
   
@@ -3049,27 +3047,37 @@ function generateGuaranteedPassableLevel(levelNum, levelName) {
     try {
       const networks = new Array(NUM_LEDS).fill(ELEMENT_TYPES.EMPTY);
       const usedPositions = new Set([0, 179]); // Старт и финиш уже заняты
-      const holeNetworks = [];
       
-      // Устанавливаем старт и финиш
-      networks[0] = ELEMENT_TYPES.START;
-      networks[179] = ELEMENT_TYPES.FINISH;
+      // 1. ФИКСИРУЕМ ПОЗИЦИИ
+      networks[0] = ELEMENT_TYPES.START; // Синяя клетка в начале первой строки
+      networks[179] = ELEMENT_TYPES.FINISH; // Красная клетка в конце последней строки
       
-      // 1. СОЗДАЕМ ПРОСТОЙ ПУТЬ ОТ СТАРТА К ФИНИШУ
-      console.log("Создаем основной путь...");
-      const mainPath = createSimplePath(0, 179, networks, usedPositions);
+      // 2. СОЗДАЕМ СЕТИ НОР (УВЕЛИЧЕННОЕ КОЛИЧЕСТВО)
+      const allNetworks = [];
+      let keyNetworkIndex = Math.floor(Math.random() * params.numNetworks);
       
-      if (!mainPath) {
-        console.log("Не удалось создать основной путь, пробуем снова...");
-        continue;
+      // Определяем позицию для норы рядом с финишем (1-3 клетки)
+      let holeNearFinish;
+      const possiblePositions = [];
+      for (let i = 1; i <= 3; i++) {
+        if (179 - i >= 152) possiblePositions.push(179 - i); // Только на последней строке
+      }
+      if (possiblePositions.length > 0) {
+        holeNearFinish = possiblePositions[Math.floor(Math.random() * possiblePositions.length)];
+        usedPositions.add(holeNearFinish);
+      } else {
+        holeNearFinish = 176; // По умолчанию
+        usedPositions.add(holeNearFinish);
       }
       
-      // 2. СОЗДАЕМ СЕТИ НОР НА РАЗНЫХ СТРОКАХ
-      console.log("Создаем сети нор...");
+      console.log(`Ключевая нора рядом с финишем: ${holeNearFinish}`);
+      
+      // Создаем все сети (УВЕЛИЧЕННОЕ КОЛИЧЕСТВО)
       for (let n = 0; n < params.numNetworks; n++) {
-        const network = createHoleNetwork(params.holesPerNetwork, networks, usedPositions, mainPath);
-        if (network && network.length >= 2) {
-          holeNetworks.push(network);
+        const networkSize = params.holesPerNetwork - 1 + Math.floor(Math.random() * 3); // 4-8 нор в сети
+        const network = createHoleCycle(networkSize, n === keyNetworkIndex, n, networks, usedPositions, holeNearFinish);
+        if (network && network.length >= 3) { // Минимум 3 норы в сети
+          allNetworks.push(network);
           
           // Создаем циклические связи в сети
           for (let i = 0; i < network.length; i++) {
@@ -3077,37 +3085,66 @@ function generateGuaranteedPassableLevel(levelNum, levelName) {
             const next = network[(i + 1) % network.length];
             networks[current] = next;
           }
+        } else {
+          console.warn(`Не удалось создать сеть ${n}, пробуем с меньшим размером`);
+          // Пробуем создать сеть с меньшим размером
+          const smallerNetwork = createHoleCycle(3, n === keyNetworkIndex, n, networks, usedPositions, holeNearFinish);
+          if (smallerNetwork && smallerNetwork.length >= 3) {
+            allNetworks.push(smallerNetwork);
+            for (let i = 0; i < smallerNetwork.length; i++) {
+              const current = smallerNetwork[i];
+              const next = smallerNetwork[(i + 1) % smallerNetwork.length];
+              networks[current] = next;
+            }
+          }
         }
       }
       
-      // 3. ДОБАВЛЯЕМ МЕШКИ (НЕ НА ПУТИ И НЕ В НОРАХ)
-      console.log("Добавляем мешки...");
-      for (let i = 0; i < params.numBags; i++) {
-        let bagPos;
-        let attemptsBag = 0;
-        do {
-          bagPos = Math.floor(Math.random() * NUM_LEDS);
-          attemptsBag++;
-        } while ((usedPositions.has(bagPos) || networks[bagPos] < 180) && attemptsBag < 100);
-        
-        if (bagPos && !usedPositions.has(bagPos)) {
-          networks[bagPos] = ELEMENT_TYPES.BAG;
-          usedPositions.add(bagPos);
-        }
+      // Проверяем, что создано достаточно сетей
+      if (allNetworks.length < 3) {
+        console.log("Создано слишком мало сетей, пробуем снова...");
+        continue;
       }
       
-      // 4. ДОБАВЛЯЕМ ДОПОЛНИТЕЛЬНЫЕ ТРОПИНКИ
-      console.log("Добавляем дополнительные тропинки...");
-      for (let p = 0; p < params.numPaths; p++) {
-        addRandomPath(networks, usedPositions);
+      // Обновляем keyNetworkIndex если нужно
+      if (keyNetworkIndex >= allNetworks.length) {
+        keyNetworkIndex = Math.floor(Math.random() * allNetworks.length);
       }
       
-      // 5. ПРОВЕРЯЕМ ПРОХОДИМОСТЬ
+      const keyNetwork = allNetworks[keyNetworkIndex];
+      console.log(`Ключевая сеть (индекс ${keyNetworkIndex}, размер ${keyNetwork.length}):`, keyNetwork);
+      
+      // 3. СТРОИМ ОБЯЗАТЕЛЬНЫЙ ПУТЬ ОТ СТАРТА К ФИНИШУ
+      const mainPath = buildMainPathEnhanced(networks, usedPositions, allNetworks, keyNetworkIndex, keyNetwork);
+      
+      if (!mainPath) {
+        console.log("Не удалось построить основной путь, пробуем снова...");
+        continue;
+      }
+      
+      // 4. ДОБАВЛЯЕМ ОБМАННЫЕ СЕТИ И ТРОПИНКИ (но меньше тропинок)
+      addDecoyNetworksAndPathsEnhanced(networks, usedPositions, allNetworks, keyNetworkIndex, mainPath);
+      
+      // 5. РАССТАВЛЯЕМ МЕШКИ И ПУСТОТЫ
+      addBagsAndVoidsEnhanced(networks, usedPositions, params.numBags);
+      
+      // 6. ДОБАВЛЯЕМ МИНИМАЛЬНОЕ КОЛИЧЕСТВО ДОПОЛНИТЕЛЬНЫХ ТРОПИНОК
+      addMinimalPaths(networks, usedPositions, params.numPaths);
+      
+      // 7. ДОБАВЛЯЕМ ДОПОЛНИТЕЛЬНЫЕ НОРЫ (если есть свободное место)
+      addExtraHoles(networks, usedPositions, allNetworks);
+      
+      // 8. ПРОВЕРЯЕМ ПРОХОДИМОСТЬ
       console.log("Проверяем проходимость...");
-      const solution = findSolutionWithRules(0, 179, networks);
+      const solution = findSolutionWithRulesEnhanced(0, 179, networks);
       
       if (solution && solution.length > 0) {
-        console.log("Уровень проходим! Решение найдено.");
+        console.log("Уровень проходим! Решение найдено. Длина решения:", solution.length);
+        console.log("Статистика:");
+        console.log("- Сетей нор:", allNetworks.length);
+        console.log("- Всего нор:", allNetworks.reduce((sum, network) => sum + network.length, 0));
+        console.log("- Тропинок:", networks.filter(cell => cell === ELEMENT_TYPES.PATH).length);
+        console.log("- Мешков:", networks.filter(cell => cell === ELEMENT_TYPES.BAG).length);
         
         // Генерируем код
         const code = generateLevelCodeFromNetworks(levelNum, levelName, networks, 179);
@@ -3117,7 +3154,7 @@ function generateGuaranteedPassableLevel(levelNum, levelName) {
           code: code,
           solution: solution,
           L_FINISH: 179,
-          holeNetworks: holeNetworks
+          holeNetworks: allNetworks
         };
       } else {
         console.log("Уровень непроходим, пробуем снова...");
@@ -3128,6 +3165,549 @@ function generateGuaranteedPassableLevel(levelNum, levelName) {
   }
   
   throw new Error(`Не удалось сгенерировать проходимый уровень после ${maxAttempts} попыток`);
+}
+
+// Улучшенное создание цикла нор (3-8 нор в сети)
+function createHoleCycle(size, isKeyNetwork, networkIndex, networks, usedPositions, holeNearFinish) {
+  const network = [];
+  const targetSize = Math.min(8, Math.max(3, size)); // 3-8 нор в сети
+  
+  if (isKeyNetwork) {
+    // Для ключевой сети добавляем нору рядом с финишем
+    network.push(holeNearFinish);
+    
+    // Добавляем остальные норы на разных строках, избегая первой строки
+    for (let i = 1; i < targetSize; i++) {
+      let holePos;
+      let attempts = 0;
+      
+      do {
+        // Выбираем строку (2-5, чтобы избежать первой строки для ключевой сети)
+        const row = 1 + Math.floor(Math.random() * 4); // 1-4 (строки 2-5)
+        const rowStart = ROWS[row].start;
+        const rowCount = ROWS[row].count;
+        const positionInRow = Math.floor(Math.random() * rowCount);
+        holePos = rowStart + positionInRow;
+        attempts++;
+      } while ((usedPositions.has(holePos) || holePos === 0 || holePos === 179) && attempts < 100);
+      
+      if (holePos && !usedPositions.has(holePos)) {
+        network.push(holePos);
+        usedPositions.add(holePos);
+      } else if (attempts >= 100) {
+        // Если не удалось найти позицию, пробуем на любой строке
+        let fallbackPos;
+        let fallbackAttempts = 0;
+        do {
+          fallbackPos = Math.floor(Math.random() * NUM_LEDS);
+          fallbackAttempts++;
+        } while ((usedPositions.has(fallbackPos) || fallbackPos === 0 || fallbackPos === 179 || fallbackPos === holeNearFinish) && fallbackAttempts < 50);
+        
+        if (fallbackPos && !usedPositions.has(fallbackPos)) {
+          network.push(fallbackPos);
+          usedPositions.add(fallbackPos);
+        }
+      }
+    }
+  } else {
+    // Для обычных сетей распределяем норы по разным строкам
+    for (let i = 0; i < targetSize; i++) {
+      let holePos;
+      let attempts = 0;
+      
+      do {
+        // Выбираем строку (0-5)
+        const row = Math.floor(Math.random() * 5);
+        const rowStart = ROWS[row].start;
+        const rowCount = ROWS[row].count;
+        const positionInRow = Math.floor(Math.random() * rowCount);
+        holePos = rowStart + positionInRow;
+        attempts++;
+      } while ((usedPositions.has(holePos) || holePos === 0 || holePos === 179) && attempts < 100);
+      
+      if (holePos && !usedPositions.has(holePos)) {
+        network.push(holePos);
+        usedPositions.add(holePos);
+      } else if (attempts >= 100) {
+        // Если не удалось найти позицию, пробуем на любой строке
+        let fallbackPos;
+        let fallbackAttempts = 0;
+        do {
+          fallbackPos = Math.floor(Math.random() * NUM_LEDS);
+          fallbackAttempts++;
+        } while ((usedPositions.has(fallbackPos) || fallbackPos === 0 || fallbackPos === 179) && fallbackAttempts < 50);
+        
+        if (fallbackPos && !usedPositions.has(fallbackPos)) {
+          network.push(fallbackPos);
+          usedPositions.add(fallbackPos);
+        }
+      }
+    }
+  }
+  
+  // Убедимся, что в сети есть уникальные позиции
+  const uniqueNetwork = [...new Set(network)];
+  return uniqueNetwork.length >= 3 ? uniqueNetwork : null;
+}
+
+// Улучшенное построение основного пути (больше нор, меньше тропинок)
+function buildMainPathEnhanced(networks, usedPositions, allNetworks, keyNetworkIndex, keyNetwork) {
+  const mainPath = [0]; // Начинаем со старта
+  
+  // 1. Сразу после старта размещаем нору из случайной сети (не ключевой)
+  let nonKeyNetworks = [];
+  for (let i = 0; i < allNetworks.length; i++) {
+    if (i !== keyNetworkIndex) {
+      nonKeyNetworks.push(i);
+    }
+  }
+  
+  if (nonKeyNetworks.length === 0) {
+    console.error("Нет неключевых сетей для начала пути");
+    return null;
+  }
+  
+  // Выбираем несколько начальных сетей для запутанности
+  const initialNetworks = [];
+  const numInitial = Math.min(3, nonKeyNetworks.length);
+  for (let i = 0; i < numInitial; i++) {
+    const idx = Math.floor(Math.random() * nonKeyNetworks.length);
+    initialNetworks.push(nonKeyNetworks[idx]);
+    nonKeyNetworks.splice(idx, 1);
+  }
+  
+  let currentPos = 0;
+  
+  // Создаем путь через несколько начальных сетей
+  for (let n = 0; n < initialNetworks.length; n++) {
+    const networkIdx = initialNetworks[n];
+    const network = allNetworks[networkIdx];
+    const hole = network[Math.floor(Math.random() * network.length)];
+    
+    // Создаем КОРОТКУЮ тропинку или используем телепортацию
+    if (Math.random() > 0.7 && n > 0) { // 30% шанс на тропинку
+      const pathLength = 1 + Math.floor(Math.random() * 2); // Очень короткая тропинка (1-2 клетки)
+      if (createVeryShortPath(currentPos, hole, pathLength, networks, usedPositions)) {
+        mainPath.push(hole);
+        currentPos = hole;
+      } else {
+        // Просто телепортируем
+        mainPath.push(hole);
+        currentPos = hole;
+      }
+    } else {
+      // Просто телепортируем через нору
+      mainPath.push(hole);
+      currentPos = hole;
+    }
+  }
+  
+  // 2. Строим маршрут к ключевой сети через несколько переходов
+  const numTransitions = 4 + Math.floor(Math.random() * 3); // 4-6 переходов
+  
+  for (let i = 0; i < numTransitions; i++) {
+    // Определяем, переключаться ли на другую сеть
+    if (i < numTransitions - 1) {
+      // Выбираем следующую сеть (не текущую и не ключевую, пока не последний переход)
+      let availableNetworks = [];
+      for (let n = 0; n < allNetworks.length; n++) {
+        if (n !== keyNetworkIndex) {
+          availableNetworks.push(n);
+        }
+      }
+      
+      if (availableNetworks.length === 0) {
+        // Если нет других сетей, используем ключевую
+        availableNetworks = [keyNetworkIndex];
+      }
+      
+      const nextNetworkIndex = availableNetworks[Math.floor(Math.random() * availableNetworks.length)];
+      const nextNetwork = allNetworks[nextNetworkIndex];
+      const nextHole = nextNetwork[Math.floor(Math.random() * nextNetwork.length)];
+      
+      // Используем телепортацию, а не тропинку
+      mainPath.push(nextHole);
+      currentPos = nextHole;
+    } else {
+      // Последний переход - в ключевую сеть
+      const keyHole = keyNetwork[Math.floor(Math.random() * keyNetwork.length)];
+      
+      // Создаем короткую тропинку к ключевой норе (для сложности)
+      if (Math.random() > 0.5) {
+        const pathLength = 2 + Math.floor(Math.random() * 3); // Короткая тропинка (2-4 клетки)
+        createVeryShortPath(currentPos, keyHole, pathLength, networks, usedPositions);
+      }
+      
+      mainPath.push(keyHole);
+      currentPos = keyHole;
+    }
+  }
+  
+  // 3. От ключевой сети к финишу
+  const keyHoleNearFinish = keyNetwork.find(pos => pos >= 176 && pos <= 178);
+  if (keyHoleNearFinish) {
+    // Короткая тропинка от текущей позиции к норе рядом с финишем
+    if (currentPos !== keyHoleNearFinish) {
+      const pathLength = 1 + Math.floor(Math.random() * 2); // Очень короткая
+      createVeryShortPath(currentPos, keyHoleNearFinish, pathLength, networks, usedPositions);
+    }
+    
+    // Очень короткая тропинка к финишу
+    createVeryShortPath(keyHoleNearFinish, 179, 1, networks, usedPositions);
+    mainPath.push(179);
+  } else {
+    // Если почему-то нет норы рядом с финишем, создаем короткий путь напрямую
+    createVeryShortPath(currentPos, 179, 2, networks, usedPositions);
+    mainPath.push(179);
+  }
+  
+  console.log("Основной путь построен (длина:", mainPath.length, "):", mainPath);
+  return mainPath;
+}
+
+// Создание очень короткой тропинки
+function createVeryShortPath(from, to, maxLength, networks, usedPositions) {
+  // Пытаемся создать путь указанной максимальной длины
+  let current = from;
+  const path = [];
+  
+  for (let i = 0; i < maxLength && current !== to; i++) {
+    const rowFrom = getRow(current);
+    const rowTo = getRow(to);
+    
+    if (rowFrom === rowTo) {
+      // На одной строке - двигаемся по горизонтали
+      const direction = to > current ? 1 : -1;
+      const next = current + direction;
+      
+      // Проверяем, что не вышли за пределы строки
+      const rowStart = ROWS[rowFrom].start;
+      const rowEnd = rowStart + ROWS[rowFrom].count - 1;
+      
+      if (next < rowStart || next > rowEnd) {
+        return false;
+      }
+      
+      if (!usedPositions.has(next) || next === to) {
+        path.push(next);
+        current = next;
+      } else {
+        return false;
+      }
+    } else {
+      // На разных строках - прерываем
+      return false;
+    }
+  }
+  
+  // Если достигли цели
+  if (current === to) {
+    // Размечаем тропинки
+    for (const pos of path) {
+      if (pos !== to) { // Не перезаписываем финиш
+        networks[pos] = ELEMENT_TYPES.PATH;
+        usedPositions.add(pos);
+      }
+    }
+    return true;
+  }
+  
+  return false;
+}
+
+// Улучшенное добавление обманных сетей и тропинок (меньше тропинок)
+function addDecoyNetworksAndPathsEnhanced(networks, usedPositions, allNetworks, keyNetworkIndex, mainPath) {
+  // Создаем ответвления от основного пути к обманным сетям (минимальное количество)
+  for (let i = 0; i < allNetworks.length; i++) {
+    if (i !== keyNetworkIndex) {
+      const network = allNetworks[i];
+      
+      // Только для некоторых сетей создаем ответвления (чтобы не перегружать)
+      if (Math.random() > 0.6) continue;
+      
+      // Выбираем случайную точку на основном пути для ответвления
+      const mainPathPoint = mainPath[Math.floor(Math.random() * mainPath.length)];
+      
+      // Выбираем случайную нору в обманной сети
+      const decoyHole = network[Math.floor(Math.random() * network.length)];
+      
+      // Создаем ОЧЕНЬ короткое ответвление к обманной норе (1 клетка)
+      if (Math.random() > 0.5) { // 50% chance
+        createSingleStepPath(mainPathPoint, decoyHole, networks, usedPositions);
+      }
+      
+      // Некоторые норы обманных сетей размещаем рядом с нормами основного пути
+      for (const hole of network) {
+        // Ищем норы основного пути рядом
+        for (const mainHole of mainPath) {
+          if (mainHole < 180 && Math.abs(hole - mainHole) < 3 && Math.random() > 0.8) {
+            // Размещаем обманную нору рядом (без тропинки)
+            // Они уже близко, игрок может спутать
+          }
+        }
+      }
+    }
+  }
+}
+
+// Создание пути в один шаг
+function createSingleStepPath(from, to, networks, usedPositions) {
+  if (Math.abs(from - to) === 1 && getRow(from) === getRow(to)) {
+    // Соседние клетки на одной строке
+    if (!usedPositions.has(to) && networks[to] >= 180) {
+      networks[to] = ELEMENT_TYPES.PATH;
+      usedPositions.add(to);
+      return true;
+    }
+  }
+  return false;
+}
+
+// Улучшенное добавление мешков и пустот
+function addBagsAndVoidsEnhanced(networks, usedPositions, numBags) {
+  // 5-10% поля для мешков (вместо 10-15%)
+  const targetBags = Math.min(numBags, Math.floor(NUM_LEDS * 0.1));
+  
+  for (let i = 0; i < targetBags; i++) {
+    let bagPos;
+    let attempts = 0;
+    
+    do {
+      bagPos = Math.floor(Math.random() * NUM_LEDS);
+      attempts++;
+    } while ((usedPositions.has(bagPos) || networks[bagPos] < 180 || 
+              isNearHole(bagPos, networks) || isNearStartOrFinish(bagPos)) && attempts < 50);
+    
+    if (bagPos && !usedPositions.has(bagPos) && bagPos !== 0 && bagPos !== 179) {
+      networks[bagPos] = ELEMENT_TYPES.BAG;
+      usedPositions.add(bagPos);
+    }
+  }
+}
+
+// Проверка, находится ли клетка рядом с норой
+function isNearHole(pos, networks) {
+  for (let i = Math.max(0, pos - 2); i <= Math.min(NUM_LEDS - 1, pos + 2); i++) {
+    if (networks[i] < 180 && networks[i] >= 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Проверка, находится ли клетка рядом со стартом или финишем
+function isNearStartOrFinish(pos) {
+  return pos === 0 || pos === 179 || 
+         pos === 1 || pos === 178 ||
+         (pos >= 38 && pos <= 40) || // Рядом со стартом в следующей строке
+         (pos >= 176 && pos <= 178); // Рядом с финишем
+}
+
+// Добавление минимального количества тропинок
+function addMinimalPaths(networks, usedPositions, numPaths) {
+  // Создаем очень мало тропинок
+  const actualPaths = Math.max(1, Math.floor(numPaths / 2));
+  
+  for (let i = 0; i < actualPaths; i++) {
+    // Выбираем случайную строку
+    const row = Math.floor(Math.random() * 5);
+    const rowStart = ROWS[row].start;
+    const rowCount = ROWS[row].count;
+    
+    // Ищем свободное место для очень короткой тропинки (1-2 клетки)
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const startInRow = Math.floor(Math.random() * (rowCount - 1));
+      const startPos = rowStart + startInRow;
+      const length = 1 + Math.floor(Math.random() * 2); // 1-2 клетки
+      
+      // Проверяем, что все клетки свободны
+      let canPlace = true;
+      for (let j = 0; j < length; j++) {
+        const pos = startPos + j;
+        if (pos >= rowStart + rowCount || usedPositions.has(pos) || networks[pos] < 180) {
+          canPlace = false;
+          break;
+        }
+      }
+      
+      if (canPlace) {
+        // Размещаем очень короткую тропинку
+        for (let j = 0; j < length; j++) {
+          const pos = startPos + j;
+          networks[pos] = ELEMENT_TYPES.PATH;
+          usedPositions.add(pos);
+        }
+        break;
+      }
+    }
+  }
+}
+
+// Добавление дополнительных нор
+function addExtraHoles(networks, usedPositions, allNetworks) {
+  // Добавляем дополнительные норы к существующим сетям
+  for (const network of allNetworks) {
+    // С вероятностью 40% добавляем дополнительную нору к сети
+    if (Math.random() > 0.6 && network.length < 8) {
+      let newHole;
+      let attempts = 0;
+      
+      do {
+        // Выбираем случайную строку
+        const row = Math.floor(Math.random() * 5);
+        const rowStart = ROWS[row].start;
+        const rowCount = ROWS[row].count;
+        const positionInRow = Math.floor(Math.random() * rowCount);
+        newHole = rowStart + positionInRow;
+        attempts++;
+      } while ((usedPositions.has(newHole) || newHole === 0 || newHole === 179) && attempts < 50);
+      
+      if (newHole && !usedPositions.has(newHole)) {
+        network.push(newHole);
+        usedPositions.add(newHole);
+        
+        // Обновляем связи в сети (цикл)
+        for (let i = 0; i < network.length; i++) {
+          const current = network[i];
+          const next = network[(i + 1) % network.length];
+          networks[current] = next;
+        }
+      }
+    }
+  }
+  
+  // Создаем небольшие дополнительные сети (2-3 норы)
+  const extraNetworks = Math.floor(Math.random() * 3);
+  for (let i = 0; i < extraNetworks; i++) {
+    const smallNetwork = [];
+    const size = 2 + Math.floor(Math.random() * 2); // 2-3 норы
+    
+    for (let j = 0; j < size; j++) {
+      let holePos;
+      let attempts = 0;
+      
+      do {
+        holePos = Math.floor(Math.random() * NUM_LEDS);
+        attempts++;
+      } while ((usedPositions.has(holePos) || holePos === 0 || holePos === 179) && attempts < 50);
+      
+      if (holePos && !usedPositions.has(holePos)) {
+        smallNetwork.push(holePos);
+        usedPositions.add(holePos);
+      }
+    }
+    
+    if (smallNetwork.length >= 2) {
+      allNetworks.push(smallNetwork);
+      // Создаем циклические связи
+      for (let j = 0; j < smallNetwork.length; j++) {
+        const current = smallNetwork[j];
+        const next = smallNetwork[(j + 1) % smallNetwork.length];
+        networks[current] = next;
+      }
+    }
+  }
+}
+
+// Улучшенный поиск решения
+function findSolutionWithRulesEnhanced(start, target, networksArray) {
+  // Используем BFS для поиска пути
+  const queue = [{pos: start, path: [], visited: new Set([start]), steps: 0}];
+  const visitedStates = new Set();
+  const maxSteps = 300; // Увеличиваем лимит для сложных уровней с большим количеством нор
+  
+  while (queue.length > 0) {
+    const {pos, path, visited, steps} = queue.shift();
+    
+    if (steps > maxSteps) continue;
+    
+    // Создаем ключ для состояния (позиция + посещенные норы)
+    const stateKey = `${pos}:${Array.from(visited).filter(v => networksArray[v] < 180).sort().join(',')}`;
+    if (visitedStates.has(stateKey)) continue;
+    visitedStates.add(stateKey);
+    
+    // Если достигли финиша
+    if (pos === target) {
+      return path;
+    }
+    
+    // Генерируем возможные ходы
+    const moves = [];
+    
+    // 1. Движение влево/вправо по тропинкам
+    const rowLen = (pos < 152) ? 38 : 28;
+    const rowStart = pos - (pos % rowLen);
+    const rowEnd = rowStart + rowLen - 1;
+    
+    // Влево
+    const leftPos = pos - 1;
+    if (leftPos >= rowStart) {
+      const leftVal = networksArray[leftPos];
+      if (leftVal === ELEMENT_TYPES.PATH || 
+          leftVal === ELEMENT_TYPES.FINISH ||
+          (leftVal < 180 && leftVal >= 0)) {
+        moves.push({
+          pos: leftPos,
+          action: 'Влево',
+          visited: new Set([...visited, leftPos]),
+          steps: steps + 1
+        });
+      }
+    }
+    
+    // Вправо
+    const rightPos = pos + 1;
+    if (rightPos <= rowEnd) {
+      const rightVal = networksArray[rightPos];
+      if (rightVal === ELEMENT_TYPES.PATH || 
+          rightVal === ELEMENT_TYPES.FINISH ||
+          (rightVal < 180 && rightVal >= 0)) {
+        moves.push({
+          pos: rightPos,
+          action: 'Вправо',
+          visited: new Set([...visited, rightPos]),
+          steps: steps + 1
+        });
+      }
+    }
+    
+    // 2. Занырнуть в нору (если стоим на норе)
+    if (networksArray[pos] < 180 && networksArray[pos] >= 0) {
+      const holePos = networksArray[pos];
+      // Проверяем, не была ли уже посещена эта нора в текущем пути
+      if (!visited.has(holePos)) {
+        moves.push({
+          pos: holePos,
+          action: 'Занырнуть',
+          visited: new Set([...visited, holePos]),
+          steps: steps + 1
+        });
+      }
+    }
+    
+    // Сортируем ходы: сначала телепортация, потом движение (для эффективности)
+    moves.sort((a, b) => {
+      const aIsTeleport = a.action === 'Занырнуть';
+      const bIsTeleport = b.action === 'Занырнуть';
+      if (aIsTeleport && !bIsTeleport) return -1;
+      if (!aIsTeleport && bIsTeleport) return 1;
+      return 0;
+    });
+    
+    // Добавляем ходы в очередь
+    for (const move of moves) {
+      if (!visited.has(move.pos)) {
+        queue.push({
+          pos: move.pos,
+          path: [...path, move.action],
+          visited: move.visited,
+          steps: move.steps
+        });
+      }
+    }
+  }
+  
+  return null;
 }
 
 // Создание простого пути от start до finish
@@ -3274,15 +3854,22 @@ function addRandomPath(networks, usedPositions) {
   return false;
 }
 
-// Поиск решения с учетом правил игры
+// Поиск решения с учетом правил игры (улучшенная версия)
 function findSolutionWithRules(start, target, networksArray) {
+  // Используем BFS для поиска пути
   const queue = [{pos: start, path: [], visited: new Set([start]), steps: 0}];
-  const maxSteps = 100; // Максимальное количество шагов
+  const visitedStates = new Set();
+  const maxSteps = 200; // Увеличим лимит для сложных уровней
   
   while (queue.length > 0) {
     const {pos, path, visited, steps} = queue.shift();
     
     if (steps > maxSteps) continue;
+    
+    // Создаем ключ для состояния (позиция + посещенные норы)
+    const stateKey = `${pos}:${Array.from(visited).sort().join(',')}`;
+    if (visitedStates.has(stateKey)) continue;
+    visitedStates.add(stateKey);
     
     // Если достигли финиша
     if (pos === target) {
@@ -3292,18 +3879,18 @@ function findSolutionWithRules(start, target, networksArray) {
     // Генерируем возможные ходы
     const moves = [];
     
-    // 1. Движение влево/вправо по тропинкам или норам
+    // 1. Движение влево/вправо по тропинкам
     const rowLen = (pos < 152) ? 38 : 28;
     const rowStart = pos - (pos % rowLen);
     const rowEnd = rowStart + rowLen - 1;
     
-    // Влево (если есть тропинка или нора слева)
+    // Влево
     const leftPos = pos - 1;
     if (leftPos >= rowStart) {
       const leftVal = networksArray[leftPos];
       if (leftVal === ELEMENT_TYPES.PATH || 
-          (leftVal < 180 && leftVal >= 0) || 
-          leftVal === ELEMENT_TYPES.FINISH) {
+          leftVal === ELEMENT_TYPES.FINISH ||
+          (leftVal < 180 && leftVal >= 0)) {
         moves.push({
           pos: leftPos,
           action: 'Влево',
@@ -3318,8 +3905,8 @@ function findSolutionWithRules(start, target, networksArray) {
     if (rightPos <= rowEnd) {
       const rightVal = networksArray[rightPos];
       if (rightVal === ELEMENT_TYPES.PATH || 
-          (rightVal < 180 && rightVal >= 0) || 
-          rightVal === ELEMENT_TYPES.FINISH) {
+          rightVal === ELEMENT_TYPES.FINISH ||
+          (rightVal < 180 && rightVal >= 0)) {
         moves.push({
           pos: rightPos,
           action: 'Вправо',
@@ -3332,15 +3919,18 @@ function findSolutionWithRules(start, target, networksArray) {
     // 2. Занырнуть в нору (если стоим на норе)
     if (networksArray[pos] < 180 && networksArray[pos] >= 0) {
       const holePos = networksArray[pos];
-      moves.push({
-        pos: holePos,
-        action: 'Занырнуть',
-        visited: new Set([...visited, holePos]),
-        steps: steps + 1
-      });
+      // Проверяем, не была ли уже посещена эта нора в текущем пути
+      if (!visited.has(holePos)) {
+        moves.push({
+          pos: holePos,
+          action: 'Занырнуть',
+          visited: new Set([...visited, holePos]),
+          steps: steps + 1
+        });
+      }
     }
     
-    // Добавляем ходы в очередь (если не посещали эту позицию в текущем пути)
+    // Добавляем ходы в очередь
     for (const move of moves) {
       if (!visited.has(move.pos)) {
         queue.push({
